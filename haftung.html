@@ -220,11 +220,11 @@
 
     .agb-link a:hover { text-decoration: underline; }
 
-    /* PRINT STYLES – DIN A4 */
+    /* PRINT STYLES – DIN A4 eine Seite */
     @media print {
       @page {
         size: A4 portrait;
-        margin: 18mm 20mm 18mm 20mm;
+        margin: 12mm 18mm 12mm 18mm;
       }
 
       * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -232,8 +232,8 @@
       body {
         background: white;
         color: #1a1209;
-        font-size: 10pt;
-        line-height: 1.5;
+        font-size: 8.5pt;
+        line-height: 1.35;
       }
 
       nav, .print-btn, .agb-link, .page-label { display: none; }
@@ -243,111 +243,124 @@
         max-width: 100%;
       }
 
-      /* Logo oben */
+      /* Logo + Titel nebeneinander */
       .page-wrap::before {
         content: '';
         display: block;
-        width: 160px;
-        height: 50px;
+        float: right;
+        width: 120px;
+        height: 38px;
         background: #1a1209 url('https://raw.githubusercontent.com/stefandongus/lunke/main/logos/lunke_motul/1.png') center/contain no-repeat;
-        margin-bottom: 16pt;
       }
 
       .page-title {
-        font-size: 20pt;
+        font-size: 16pt;
         color: #1a1209;
         border-bottom: 1.5pt solid #1a1209;
-        padding-bottom: 8pt;
-        margin-bottom: 12pt;
+        padding-bottom: 5pt;
+        margin-bottom: 7pt;
+        line-height: 1;
       }
 
       .intro-text {
         color: #333;
-        font-size: 9pt;
-        margin-bottom: 6pt;
-        line-height: 1.55;
+        font-size: 8pt;
+        margin-bottom: 3.5pt;
+        line-height: 1.4;
       }
 
       .wichtig {
-        background: #f0f0f0 !important;
+        background: #efefef !important;
         color: #1a1209 !important;
-        border-left: 3pt solid #1a1209 !important;
-        font-size: 9pt;
-        padding: 7pt 10pt;
-        margin: 12pt 0 10pt;
-        letter-spacing: 0.03em;
+        border-left: 2.5pt solid #1a1209 !important;
+        font-size: 8pt;
+        padding: 4pt 8pt;
+        margin: 7pt 0 6pt;
+        letter-spacing: 0.02em;
       }
 
       .formular {
         background: #f8f8f8 !important;
-        padding: 12pt;
-        gap: 10pt;
+        padding: 8pt 10pt;
+        gap: 0;
         border: 0.5pt solid #ccc;
+        display: block;
+      }
+
+      .form-field {
+        margin-bottom: 7pt;
+        display: block;
       }
 
       .section-sub {
         color: #1a1209 !important;
-        font-size: 9pt;
-        margin-bottom: 1pt;
+        font-size: 8.5pt;
+        display: block;
+        margin-bottom: 0;
+        margin-top: 4pt;
       }
 
       .section-hint {
-        color: #666 !important;
-        font-size: 8pt;
-        margin-bottom: 6pt;
+        color: #777 !important;
+        font-size: 7pt;
+        display: block;
+        margin-bottom: 5pt;
       }
 
       .form-label {
-        color: #444 !important;
-        font-size: 7.5pt;
-        letter-spacing: 0.08em;
-        margin-bottom: 2pt;
+        color: #555 !important;
+        font-size: 7pt;
+        letter-spacing: 0.06em;
+        display: block;
+        margin-bottom: 1pt;
       }
 
       .form-line {
         color: #1a1209 !important;
         border: none !important;
-        border-bottom: 0.75pt solid #999 !important;
+        border-bottom: 0.5pt solid #aaa !important;
         background: transparent !important;
-        font-size: 10pt;
-        padding: 3pt 0 !important;
+        font-size: 9pt;
+        padding: 2pt 0 !important;
         width: 100%;
         display: block;
+        height: 16pt;
       }
 
       .form-hint {
-        color: #666 !important;
-        font-size: 7.5pt;
-        margin-top: 2pt;
+        color: #777 !important;
+        font-size: 7pt;
+        display: block;
+        margin-top: 1pt;
+        margin-bottom: 3pt;
       }
 
       .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 16pt;
+        gap: 12pt;
+        margin-bottom: 5pt;
       }
 
-      .form-field {
-        gap: 2pt;
-      }
+      .form-row .form-field { margin-bottom: 0; }
 
       .divider-line {
         border-top: 0.5pt solid #ccc !important;
-        margin: 8pt 0 !important;
+        margin: 6pt 0 !important;
+        display: block;
       }
 
-      /* Kein Seitenumbruch im Formular */
       .formular { page-break-inside: avoid; }
 
-      /* Footer-Zeile unten */
       .page-wrap::after {
         content: 'Tra1ls e.V. · Lindweilerweg · 50769 Köln · www.lunketrails.de';
         display: block;
-        margin-top: 20pt;
-        font-size: 7.5pt;
-        color: #999;
+        clear: both;
+        margin-top: 8pt;
+        font-size: 7pt;
+        color: #aaa;
         border-top: 0.5pt solid #ddd;
-        padding-top: 6pt;
+        padding-top: 4pt;
         text-align: center;
       }
     }

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Quest for Dirt and Soil – Lunke Trails</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dirt:   #2b1f0e;
+      --earth:  #4a3520;
+      --trail:  #8b5e2a;
+      --sand:   #c8a86b;
+      --white:  #f5f0ea;
+      --ink:    #1a1209;
+      --accent: #e8580a;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--ink);
+      color: var(--white);
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 64px;
+      background: rgba(26, 18, 9, 0.97);
+      border-bottom: 1px solid rgba(139, 94, 42, 0.25);
+    }
+
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 38px; width: auto; }
+
+    .nav-back {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sand);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--accent); }
+
+    /* HERO IMAGE */
+    .story-img {
+      width: 100%;
+      height: 55vh;
+      overflow: hidden;
+    }
+
+    .story-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      display: block;
+    }
+
+    /* HERO */
+    .story-hero {
+      padding: 6rem 2.5rem 5rem;
+      max-width: 820px;
+      margin: 0 auto;
+      border-bottom: 1px solid rgba(139, 94, 42, 0.2);
+    }
+
+    .story-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+
+    .story-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      text-transform: uppercase;
+      line-height: 0.95;
+      color: var(--white);
+    }
+
+    .story-title em {
+      font-style: normal;
+      color: var(--sand);
+      display: block;
+    }
+
+    /* CONTENT */
+    .story-body {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 4rem 2.5rem 6rem;
+    }
+
+    .story-section {
+      margin-bottom: 3rem;
+    }
+
+    .story-section h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--sand);
+      margin-bottom: 0.75rem;
+    }
+
+    .story-section p {
+      color: rgba(245, 240, 234, 0.75);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .story-closing {
+      margin-top: 3.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(139, 94, 42, 0.25);
+    }
+
+    .story-closing p {
+      color: rgba(245, 240, 234, 0.6);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 0.75rem;
+    }
+
+    .story-closing .danke {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; }
+      .story-hero, .story-body { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .story-hero { padding-top: 3.5rem; padding-bottom: 3rem; }
+      .story-body { padding-top: 3rem; padding-bottom: 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <img src="https://raw.githubusercontent.com/stefandongus/lunke/main/logos/lunke_motul/1.png" alt="Lunke Trails" />
+    </a>
+    <a href="index.html" class="nav-back">← Zurück</a>
+  </nav>
+
+  <div class="story-img">
+    <img src="image/weitere/Bildschirmfoto+2024-05-20+um+22.47.54.png" alt="Lunke Trails Geschichte" />
+  </div>
+
+  <div class="story-hero">
+    <span class="story-label">The Story behind</span>
+    <h1 class="story-title">The Quest<em>for Dirt<br>and Soil</em></h1>
+  </div>
+
+  <div class="story-body">
+
+    <div class="story-section">
+      <h2>Die Entstehung unseres Vereins</h2>
+      <p>Unsere Geschichte beginnt mit der Schließung unseres ursprünglichen Geländes, die die Geburtsstunde für unseren Verein markierte. Inmitten dieser Herausforderung formten sich unsere Werte von Gemeinschaft, Engagement und Entschlossenheit.</p>
+    </div>
+
+    <div class="story-section">
+      <h2>Die Suche nach einem neuen Zuhause</h2>
+      <p>Die Schließung des ursprünglichen Geländes zwang uns zu einem Neuanfang. Ein engagierter Vorstand setzte sich das Ziel, ein passendes Gelände zu finden, auf dem unsere Vision und Aktivitäten gedeihen konnten. Dies war keine leichte Aufgabe, da es intensive Bemühungen und Rücksprachen mit Behörden erforderte, um die richtige Umgebung für unsere Zwecke zu schaffen.</p>
+    </div>
+
+    <div class="story-section">
+      <h2>Die Herausforderung der Finanzierung</h2>
+      <p>Ein entscheidender Schritt auf unserem Weg war die Suche nach finanzieller Unterstützung durch Sponsoren und die Stadt Köln. Die hohen Kosten für die Anschaffung eines passenden Geländes und die Entwicklung notwendiger Infrastrukturen wurden durch Sponsoren und Fördergelder ermöglicht.</p>
+    </div>
+
+    <div class="story-section">
+      <h2>Der Vorstand und die Sicherheit im Fokus</h2>
+      <p>Während dieser intensiven Phase war unser Vorstand unermüdlich damit beschäftigt, nicht nur die organisatorischen Aspekte der Vereinsgründung zu managen, sondern auch die Sicherheit unserer Mitglieder und Besucher zu gewährleisten. Die Entwicklung von umfassenden Sicherheitskonzepten wurde zu einer zentralen Aufgabe, die von unserem engagierten Vorstand mit höchster Priorität bearbeitet wurde.</p>
+    </div>
+
+    <div class="story-closing">
+      <p>Wir sind stolz darauf, dass diese Herausforderungen uns nicht nur zusammengeschweißt, sondern auch gestärkt haben. Unser Verein steht heute auf einem soliden Fundament, dank der Unterstützung unserer Sponsoren, der Beharrlichkeit unseres Vorstands und Mitglieder und der leidenschaftlichen Gemeinschaft, die unsere Vision teilt.</p>
+      <p>Schaut Euch gerne weiter auf unserer Website um, um mehr über unsere Projekte, Aktivitäten und die Menschen hinter unserem Verein zu erfahren.</p>
+      <p class="danke">Vielen Dank für Dein Interesse und Deine Unterstützung!</p>
+    </div>
+
+  </div>
+
+</body>
+</html>

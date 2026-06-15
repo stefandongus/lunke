@@ -426,6 +426,69 @@
       color: rgba(245, 240, 234, 0.7);
     }
 
+    /* ── STORY & SUPPORTERS TEASER ── */
+    .teaser-wrap {
+      background: #eae8e2;
+      padding: 5rem 2.5rem 3rem;
+    }
+
+    .teaser-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: start;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .teaser-item {
+      text-decoration: none;
+      display: block;
+    }
+
+    .teaser-title {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 400;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      color: #2a2620;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .teaser-title span {
+      text-decoration: underline;
+      text-underline-offset: 6px;
+      text-decoration-thickness: 1px;
+    }
+
+    .teaser-item:hover .teaser-title { color: var(--accent); }
+
+    .teaser-sub {
+      font-size: 0.95rem;
+      color: rgba(42, 38, 32, 0.6);
+    }
+
+    .teaser-divider {
+      width: 1px;
+      height: 80px;
+      background: rgba(42, 38, 32, 0.15);
+      margin-top: 0.5rem;
+    }
+
+    .teaser-line {
+      max-width: 1100px;
+      margin: 0 auto;
+      height: 1px;
+      background: rgba(42, 38, 32, 0.15);
+    }
+
+    @media (max-width: 768px) {
+      .teaser-wrap { padding: 3rem 1.25rem 2rem; }
+      .teaser-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .teaser-divider { display: none; }
+    }
+
     /* ── GALLERY ── */
     .gallery-grid {
       display: grid;
@@ -777,39 +840,18 @@
     </div>
   </div>
 
-  <!-- ÖFFNUNGSZEITEN -->
-  <div class="oeffnung-wrap" id="zeiten">
-    <div class="oeffnung-inner">
-      <div>
-        <p class="section-label">Öffnungszeiten</p>
-        <h2 class="section-title">Wann du fahren kannst</h2>
-        <ul class="zeit-list">
-          <li><strong>Montag</strong> <span class="closed">Geschlossen</span></li>
-          <li><strong>Dienstag</strong> <span class="closed">Geschlossen</span></li>
-          <li><strong>Mittwoch</strong> <span>15:00 – Einbruch der Dunkelheit</span></li>
-          <li><strong>Donnerstag</strong> <span class="closed">Geschlossen</span></li>
-          <li><strong>Freitag</strong> <span>15:00 – Einbruch der Dunkelheit</span></li>
-          <li><strong>Samstag</strong> <span>12:00 – Einbruch der Dunkelheit</span></li>
-          <li><strong>Sonntag</strong> <span>12:00 – Einbruch der Dunkelheit</span></li>
-        </ul>
-        <div class="hinweis">
-          Bei starkem Regen oder sehr feuchtem Untergrund bleibt der Park geschlossen. Aktuelle Infos gibt's auf Instagram.
-        </div>
-      </div>
-      <div>
-        <p class="section-label">Regeln</p>
-        <h2 class="section-title">Park-Regeln</h2>
-        <ul class="zeit-list">
-          <li><strong>Helm</strong> <span>Immer Pflicht</span></li>
-          <li><strong>Eintritt</strong> <span>Kostenlos für Mitglieder</span></li>
-          <li><strong>Gäste</strong> <span>Spende erwünscht</span></li>
-          <li><strong>Alkohol</strong> <span>Nicht erlaubt</span></li>
-          <li><strong>Hunde</strong> <span>Nur angeleint</span></li>
-          <li><strong>Fahrbetrieb</strong> <span>Nur bei trockenem Boden</span></li>
-          <li><strong>Müll</strong> <span>Nimm ihn mit</span></li>
-        </ul>
-      </div>
+  <!-- STORY & SUPPORTERS -->
+  <div class="teaser-wrap">
+    <div class="teaser-inner">
+      <a href="story.html" class="teaser-item">
+        <p class="teaser-sub">Der lange Weg nach Longerich</p>
+      </a>
+      <div class="teaser-divider"></div>
+      <a href="supporters.html" class="teaser-item">
+        <p class="teaser-sub">Shoutouts an die besten Sponsoren</p>
+      </a>
     </div>
+    <div class="teaser-line"></div>
   </div>
 
   <!-- GALLERY -->
