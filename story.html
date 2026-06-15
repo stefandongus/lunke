@@ -57,14 +57,19 @@
     }
     .nav-back:hover { color: var(--accent); }
 
-    /* HERO IMAGE */
-    .story-img {
+    /* HERO IMAGE + TEXT OVERLAY */
+    .story-hero {
+      position: relative;
       width: 100%;
-      height: 55vh;
+      min-height: 85vh;
+      display: flex;
+      align-items: flex-end;
       overflow: hidden;
     }
 
-    .story-img img {
+    .story-hero-img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -72,14 +77,24 @@
       display: block;
     }
 
-    /* HERO */
-    .story-hero {
-      padding: 6rem 2.5rem 5rem;
-      max-width: 820px;
-      margin: 0 auto;
-      border-bottom: 1px solid rgba(139, 94, 42, 0.2);
+    .story-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(26, 18, 9, 0.05) 0%,
+        rgba(26, 18, 9, 0.55) 50%,
+        rgba(26, 18, 9, 0.97) 100%
+      );
     }
 
+    .story-hero-content {
+      position: relative;
+      padding: 0 2.5rem 4rem;
+      max-width: 820px;
+    }
+
+    /* HERO */
     .story-label {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 0.8rem;
@@ -158,8 +173,8 @@
 
     @media (max-width: 768px) {
       nav { padding: 0 1.25rem; }
-      .story-hero, .story-body { padding-left: 1.25rem; padding-right: 1.25rem; }
-      .story-hero { padding-top: 3.5rem; padding-bottom: 3rem; }
+      .story-hero { min-height: 70vh; }
+      .story-hero-content { padding: 0 1.25rem 3rem; }
       .story-body { padding-top: 3rem; padding-bottom: 4rem; }
     }
   </style>
@@ -173,13 +188,14 @@
     <a href="index.html" class="nav-back">← Zurück</a>
   </nav>
 
-  <div class="story-img">
-    <img src="image/weitere/Bildschirmfoto+2024-05-20+um+22.47.54.png" alt="Lunke Trails Geschichte" />
-  </div>
-
+  <!-- HERO mit Bild + Text overlay -->
   <div class="story-hero">
-    <span class="story-label">The Story behind</span>
-    <h1 class="story-title">The Quest<em>for Dirt<br>and Soil</em></h1>
+    <img src="image/weitere/Bildschirmfoto+2024-05-20+um+22.47.54.png" alt="Lunke Trails Geschichte" class="story-hero-img" />
+    <div class="story-hero-overlay"></div>
+    <div class="story-hero-content">
+      <span class="story-label">The Story behind</span>
+      <h1 class="story-title">The Quest<em>for Dirt<br>and Soil</em></h1>
+    </div>
   </div>
 
   <div class="story-body">

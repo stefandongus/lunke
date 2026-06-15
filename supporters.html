@@ -57,6 +57,28 @@
     }
     .nav-back:hover { color: var(--accent); }
 
+    /* HERO FOTO */
+    .supporters-hero {
+      position: relative;
+      width: 100%;
+      height: 55vh;
+      overflow: hidden;
+    }
+
+    .supporters-hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .supporters-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(26,18,9,0.1) 0%, rgba(26,18,9,0.45) 100%);
+    }
+
     /* HEADER */
     .supporters-header {
       max-width: 1100px;
@@ -141,40 +163,25 @@
     }
 
     .logo-cell {
-      background: var(--dirt);
+      background: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 3rem 2.5rem;
+      padding: 2.5rem 2rem;
       min-height: 160px;
       transition: background 0.2s;
     }
 
-    .logo-cell:hover { background: var(--earth); }
+    .logo-cell:hover { background: #f0ede8; }
 
     .logo-cell img {
       max-width: 100%;
-      max-height: 80px;
+      max-height: 90px;
       width: auto;
       height: auto;
       object-fit: contain;
-      filter: brightness(0) invert(1);
-      opacity: 0.75;
-      transition: opacity 0.2s;
+      display: block;
     }
-
-    .logo-cell:hover img {
-      opacity: 1;
-      filter: none;
-    }
-
-    /* Stadt Köln hat farbiges Logo — kein invert */
-    .logo-cell.color img {
-      filter: none;
-      opacity: 0.85;
-    }
-
-    .logo-cell.color:hover img { opacity: 1; }
 
     @media (max-width: 768px) {
       nav { padding: 0 1.25rem; }
@@ -193,6 +200,11 @@
     </a>
     <a href="index.html" class="nav-back">← Zurück</a>
   </nav>
+
+  <div class="supporters-hero">
+    <img src="image/weitere/Sponsoren2.jpg" alt="Lunke Trails Sponsoren" class="supporters-hero-img" />
+    <div class="supporters-hero-overlay"></div>
+  </div>
 
   <div class="supporters-header">
     <span class="supporters-label">Tra1ls e.V.</span>
@@ -222,7 +234,7 @@
         />
       </div>
 
-      <div class="logo-cell color">
+      <div class="logo-cell">
         <img
           src="https://raw.githubusercontent.com/stefandongus/lunke/main/logos/sponsoren/Stadt%20K%C3%B6ln%201200px-Logo_Stadt_Koeln.png"
           alt="Stadt Köln"
