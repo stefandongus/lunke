@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Haftungsverzichtserklärung – Lunke Trails</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dirt:   #2b1f0e;
+      --earth:  #4a3520;
+      --trail:  #8b5e2a;
+      --sand:   #c8a86b;
+      --white:  #f5f0ea;
+      --ink:    #1a1209;
+      --accent: #e8580a;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--ink);
+      color: var(--white);
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 64px;
+      background: rgba(26, 18, 9, 0.97);
+      border-bottom: 1px solid rgba(139, 94, 42, 0.25);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .nav-logo img { height: 38px; width: auto; }
+
+    .nav-back {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sand);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-back:hover { color: var(--accent); }
+
+    /* CONTENT */
+    .page-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 5rem 2.5rem 6rem;
+    }
+
+    .page-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .page-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      text-transform: uppercase;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(139, 94, 42, 0.3);
+    }
+
+    .intro-text {
+      color: rgba(245, 240, 234, 0.75);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+    }
+
+    .wichtig {
+      margin: 2.5rem 0;
+      padding: 1.25rem 1.5rem;
+      border-left: 4px solid var(--accent);
+      background: rgba(232, 88, 10, 0.1);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* FORMULAR */
+    .formular {
+      margin-top: 2.5rem;
+      background: var(--earth);
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sand);
+    }
+
+    .form-line {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid rgba(245, 240, 234, 0.3);
+      background: transparent;
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      padding: 0.5rem 0;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-line:focus { border-bottom-color: var(--accent); }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .form-hint {
+      font-size: 0.8rem;
+      color: rgba(245, 240, 234, 0.4);
+      margin-top: 0.25rem;
+    }
+
+    .divider-line {
+      border: none;
+      border-top: 1px solid rgba(245, 240, 234, 0.15);
+    }
+
+    .section-sub {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--sand);
+      margin-bottom: 0.25rem;
+    }
+
+    .section-hint {
+      font-size: 0.85rem;
+      color: rgba(245, 240, 234, 0.5);
+      margin-bottom: 1.25rem;
+    }
+
+    /* PRINT BUTTON */
+    .print-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2.5rem;
+      padding: 0.85rem 2rem;
+      background: var(--accent);
+      color: var(--white);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .print-btn:hover { background: #c44608; }
+
+    .agb-link {
+      display: block;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: rgba(245, 240, 234, 0.5);
+    }
+
+    .agb-link a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .agb-link a:hover { text-decoration: underline; }
+
+    /* PRINT STYLES – DIN A4 */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 18mm 20mm 18mm 20mm;
+      }
+
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+      body {
+        background: white;
+        color: #1a1209;
+        font-size: 10pt;
+        line-height: 1.5;
+      }
+
+      nav, .print-btn, .agb-link, .page-label { display: none; }
+
+      .page-wrap {
+        padding: 0;
+        max-width: 100%;
+      }
+
+      /* Logo oben */
+      .page-wrap::before {
+        content: '';
+        display: block;
+        width: 160px;
+        height: 50px;
+        background: #1a1209 url('https://raw.githubusercontent.com/stefandongus/lunke/main/logos/lunke_motul/1.png') center/contain no-repeat;
+        margin-bottom: 16pt;
+      }
+
+      .page-title {
+        font-size: 20pt;
+        color: #1a1209;
+        border-bottom: 1.5pt solid #1a1209;
+        padding-bottom: 8pt;
+        margin-bottom: 12pt;
+      }
+
+      .intro-text {
+        color: #333;
+        font-size: 9pt;
+        margin-bottom: 6pt;
+        line-height: 1.55;
+      }
+
+      .wichtig {
+        background: #f0f0f0 !important;
+        color: #1a1209 !important;
+        border-left: 3pt solid #1a1209 !important;
+        font-size: 9pt;
+        padding: 7pt 10pt;
+        margin: 12pt 0 10pt;
+        letter-spacing: 0.03em;
+      }
+
+      .formular {
+        background: #f8f8f8 !important;
+        padding: 12pt;
+        gap: 10pt;
+        border: 0.5pt solid #ccc;
+      }
+
+      .section-sub {
+        color: #1a1209 !important;
+        font-size: 9pt;
+        margin-bottom: 1pt;
+      }
+
+      .section-hint {
+        color: #666 !important;
+        font-size: 8pt;
+        margin-bottom: 6pt;
+      }
+
+      .form-label {
+        color: #444 !important;
+        font-size: 7.5pt;
+        letter-spacing: 0.08em;
+        margin-bottom: 2pt;
+      }
+
+      .form-line {
+        color: #1a1209 !important;
+        border: none !important;
+        border-bottom: 0.75pt solid #999 !important;
+        background: transparent !important;
+        font-size: 10pt;
+        padding: 3pt 0 !important;
+        width: 100%;
+        display: block;
+      }
+
+      .form-hint {
+        color: #666 !important;
+        font-size: 7.5pt;
+        margin-top: 2pt;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16pt;
+      }
+
+      .form-field {
+        gap: 2pt;
+      }
+
+      .divider-line {
+        border-top: 0.5pt solid #ccc !important;
+        margin: 8pt 0 !important;
+      }
+
+      /* Kein Seitenumbruch im Formular */
+      .formular { page-break-inside: avoid; }
+
+      /* Footer-Zeile unten */
+      .page-wrap::after {
+        content: 'Tra1ls e.V. · Lindweilerweg · 50769 Köln · www.lunketrails.de';
+        display: block;
+        margin-top: 20pt;
+        font-size: 7.5pt;
+        color: #999;
+        border-top: 0.5pt solid #ddd;
+        padding-top: 6pt;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; }
+      .page-wrap { padding: 3rem 1.25rem 4rem; }
+      .form-row { grid-template-columns: 1fr; gap: 1.5rem; }
+      .formular { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <img src="https://raw.githubusercontent.com/stefandongus/lunke/main/logos/lunke_motul/1.png" alt="Lunke Trails" />
+    </a>
+    <a href="index.html" class="nav-back">← Zurück</a>
+  </nav>
+
+  <div class="page-wrap">
+    <p class="page-label">Tra1ls e.V.</p>
+    <h1 class="page-title">Haftungsverzichts&shy;erklärung</h1>
+
+    <p class="intro-text">Ich erkläre mich damit einverstanden, auf jegliche Ansprüche zu verzichten und den Tra1ls e.V. als Betreiber, dessen gesetzlichen Vertreter und den Vorstand von jeglicher Haftung für sämtliche Ansprüche zu befreien, egal aus welchem Rechtsgrund wie z.B. Verlust, Beschädigung, Kosten oder Verletzungen.</p>
+    <p class="intro-text">Um mich vor Risiken und Gefahren der Nutzung des Trainingsgeländes des Tra1ls e.V. zu schützen, folge ich der Hausordnung.</p>
+    <p class="intro-text">Ich habe die allgemeinen Geschäftsbedingungen und Hausordnung des Tra1ls e.V. gelesen und verstanden.</p>
+
+    <div class="wichtig">Wichtig – Unterzeichnung der Haftungsverzichtserklärung</div>
+
+    <div class="formular">
+
+      <!-- Eigene Unterschrift -->
+      <div class="form-field">
+        <span class="section-sub">Eigene Erklärung</span>
+        <span class="section-hint">Für alle Besucher/innen</span>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">Ich / Wir (Name, Vorname)</label>
+        <input type="text" class="form-line" placeholder=" " />
+        <span class="form-hint">haben die Nutzungsbedingungen und die Hausordnung / Verhaltensregeln gelesen und auch verstanden.</span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Ort und Datum</label>
+          <input type="text" class="form-line" placeholder=" " />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Unterschrift</label>
+          <input type="text" class="form-line" placeholder=" " />
+        </div>
+      </div>
+
+      <hr class="divider-line" />
+
+      <!-- Erziehungsberechtigte -->
+      <div class="form-field">
+        <span class="section-sub">Für Minderjährige</span>
+        <span class="section-hint">Nur auszufüllen, wenn ein Minderjähriger den Park besucht</span>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">Ich / Wir (Erziehungsberechtigte/r)</label>
+        <input type="text" class="form-line" placeholder=" " />
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">erteilen hiermit die Erlaubnis, dass unser/e Sohn / Tochter</label>
+        <input type="text" class="form-line" placeholder=" " />
+        <span class="form-hint">die Strecken des Trainingsgeländes des Tra1ls e.V. benutzen darf.</span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Ort und Datum</label>
+          <input type="text" class="form-line" placeholder=" " />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Unterschrift</label>
+          <input type="text" class="form-line" placeholder=" " />
+        </div>
+      </div>
+
+    </div>
+
+    <button class="print-btn" onclick="window.print()">⎙ Formular drucken</button>
+    <span class="agb-link">Bitte ausgefüllt beim ersten Besuch am Eingangscontainer abgeben. · <a href="agb.html">→ AGB lesen</a></span>
+
+  </div>
+
+</body>
+</html>

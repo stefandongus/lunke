@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AGB – Lunke Trails</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dirt:   #2b1f0e;
+      --earth:  #4a3520;
+      --trail:  #8b5e2a;
+      --sand:   #c8a86b;
+      --white:  #f5f0ea;
+      --ink:    #1a1209;
+      --accent: #e8580a;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--ink);
+      color: var(--white);
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 64px;
+      background: rgba(26, 18, 9, 0.97);
+      border-bottom: 1px solid rgba(139, 94, 42, 0.25);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 38px;
+      width: auto;
+    }
+
+    .nav-back {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sand);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-back:hover { color: var(--accent); }
+
+    /* CONTENT */
+    .page-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 5rem 2.5rem 6rem;
+    }
+
+    .page-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .page-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      text-transform: uppercase;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-meta {
+      font-size: 0.85rem;
+      color: rgba(245, 240, 234, 0.4);
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(139, 94, 42, 0.3);
+    }
+
+    .agb-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .agb-section h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--sand);
+      margin-bottom: 0.75rem;
+    }
+
+    .agb-section p {
+      color: rgba(245, 240, 234, 0.75);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 0.75rem;
+    }
+
+    .agb-section p:last-child { margin-bottom: 0; }
+
+    .agb-intro {
+      color: rgba(245, 240, 234, 0.75);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid rgba(139, 94, 42, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; }
+      .page-wrap { padding: 3rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <img src="https://raw.githubusercontent.com/stefandongus/lunke/main/logos/lunke_motul/1.png" alt="Lunke Trails" />
+    </a>
+    <a href="index.html" class="nav-back">← Zurück</a>
+  </nav>
+
+  <div class="page-wrap">
+    <p class="page-label">Tra1ls e.V.</p>
+    <h1 class="page-title">Allgemeine Geschäftsbedingungen</h1>
+    <p class="page-meta">Köln, den 20.7.2023</p>
+
+    <p class="agb-intro">Diese Allgemeinen Geschäftsbedingungen des Trainingsgeländes vom Tra1ls e.V. am Lindweiler Weg in Köln gelten für die Benutzung des Trainingsgeländes vom Tra1ls e.V.. Zunächst wird die Nutzung des Vereinsgeländes geregelt.</p>
+
+    <div class="agb-section">
+      <h2>1. Verantwortlichkeit</h2>
+      <p>Alle Fahrer auf dem Trainingsgelände befahren die Strecken auf eigene Gefahr und tragen die alleinige zivil- und strafrechtliche Verantwortung für alle durch sie verursachten Schäden. Die Fahrer sind sich der Gefahren durch die Benutzung der Strecken voll umfänglich bewusst. Bei Minderjährigen müssen die Erziehungsberechtigten den obligatorischen Haftungsausschluss ausgefüllt und unterschrieben am Eingangscontainer des Vereins Tra1ls e.V. abgeben.</p>
+      <p>Der Betreiber übernimmt keinerlei Gewähr für den Zustand der einzelnen Strecken und der dazugehörigen Einrichtungen. Während der Öffnungszeiten des Trainingsgeländes Tra1ls e.V. befahren Fahrer unterschiedlichen Leistungsniveaus gleichzeitig die Strecken, deshalb ist auf langsamere Fahrer zu achten. Den Anweisungen des Personals des Trainingsgeländes vom Tra1ls e.V. ist Folge zu leisten bezüglich organisatorischer und sicherheitsrelevanter Anweisungen.</p>
+    </div>
+
+    <div class="agb-section">
+      <h2>2. Haftungsverzicht</h2>
+      <p>Der Fahrer haftet für alle durch die Nutzung des Trainingsgeländes Tra1ls e.V. entstehenden mittelbaren und unmittelbaren Schäden, auch gegenüber Dritten. Der Betreiber des Trainingsgeländes Tra1ls e.V. haftet weder dem Fahrer noch Dritten gegenüber für Sturzschäden oder irgendwelchen anderen Schäden, die durch Hindernisse oder ähnliche Ereignisse entstehen, es sei denn, der Betreiber handelt vorsätzlich oder grob fahrlässig. Dies gilt auch für die Haftung von Angestellten, Mitarbeitern, Vertretern und Erfüllungsgehilfen des Tra1ls e.V..</p>
+      <p>Der Fahrer haftet für durch Vorsatz oder Fahrlässigkeit verursachte Schäden an Dritten. Hierunter fallen Personen- oder Sachschäden. Der Tra1ls e.V. behält sich das Recht vor, alle durch höhere Gewalt, aus Sicherheitsgründen oder von Behörden angeordneten erforderlichen Änderungen des Betriebes vorzunehmen oder den Betrieb abzubrechen, falls dies durch außerordentliche Gründe bedingt ist, ohne irgendwelchen Schadenersatz zu leisten.</p>
+    </div>
+
+    <div class="agb-section">
+      <h2>3. Teilnahme an Trainings, Kursen oder Events</h2>
+      <p>Die Teilnahme erfolgt grundsätzlich auf eigene Gefahr.</p>
+    </div>
+
+    <div class="agb-section">
+      <h2>4. Fahrräder</h2>
+      <p>Es sind nur für den Einsatz in einem Bikepark geeignete Mountainbikes, Dirtbikes oder BMX zulässig. Der Fahrer trägt die Verantwortung für einen technisch einwandfreien Zustand des Fahrrads.</p>
+    </div>
+
+    <div class="agb-section">
+      <h2>5. Hausordnung / Sicherheitsbestimmungen</h2>
+      <p>Jeder Fahrer muss einen Helm tragen, Vollvisierhelme (Integralhelme) werden empfohlen. Das Tragen von Protektoren und Handschuhen wird dringend empfohlen.</p>
+      <p>Während des Betriebes des Bikeparks herrscht für die Fahrer absolutes Verbot für die Einnahme von Alkohol, Drogen oder starken Medikamenten, die die Sinnes- und Wahrnehmungsfähigkeit beeinträchtigen können.</p>
+      <p>Jeder Fahrer muss sich so verhalten, dass er andere nicht gefährdet. Die Strecken dürfen nur von oben nach unten (Einbahn) befahren werden.</p>
+      <p>Der Verein Tra1ls e.V. haftet weder für eine bestimmte Beschaffenheit der Strecken noch für eine besondere Absicherung gefährlicher Bereiche. Das Befahren der Strecken mit motorisierten Fahrzeugen ist strengstens verboten und wird ausnahmslos zur Anzeige gebracht.</p>
+      <p>Das Stehenbleiben auf der Strecke, insbesondere hinter Kurven und Hindernissen, ist streng verboten. Trainingsgruppen dürfen nur in gut übersichtlichen Abschnitten neben der Strecke anhalten.</p>
+      <p>Eltern haften für ihre Kinder. An unübersichtlichen Stellen langsam fahren. Sicherheitsabstand einhalten! Der Vorausfahrende sowie der unerfahrenere Biker haben immer Vorfahrt und dürfen nicht genötigt werden.</p>
+      <p>Für weniger erfahrene Fahrer ist zu beachten, dass sie sich langsam an die schwierigeren Strecken rantasten.</p>
+      <p>BMX-Trailsbereich rechts vom Eingang: Diese Strecken befahren ausschließlich gut geübte Fahrer mit sehr viel Erfahrung. Diese dürfen nur mit Reifen ohne Stollen bzw. mit BMX-Bereifung befahren werden. Befahren bei Nässe verboten!</p>
+      <p>Die aufgestellten Schilder und Markierungen auf den einzelnen Strecken müssen, um Unfälle zu vermeiden, unbedingt beachtet werden. Achtet auf Besucher und Kinder, die sich auf dem Trainingsgelände befinden.</p>
+      <p>Hunde sind mit Betreten des Geländes anzuleinen. Sie dürfen die Strecken nicht betreten. Bei Zuwiderhandlung muss der Hund samt Halter das Gelände verlassen.</p>
+      <p>Jeder Benutzer sollte nur die Strecken befahren, die seinem eigenem Anforderungsprofil und Können entsprechen.</p>
+    </div>
+
+    <div class="agb-section">
+      <h2>6. Ausschluss</h2>
+      <p>Ein Nutzer kann ganz oder teilweise ausgeschlossen werden, wenn er den Betrieb stört oder den Anweisungen des Tra1ls e.V. und seiner Angestellten, Mitarbeitern, Vertretern oder Erfüllungsgehilfen nicht Folge leistet (Hausrecht). In diesen Fällen wird der Nutzungsbeitrag bzw. Eintritt nicht zurückerstattet.</p>
+    </div>
+  </div>
+
+</body>
+</html>
