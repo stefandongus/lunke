@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lunke Trails – Dirtpark Köln</title>
+  <meta name="description" content="Lunke Trails – Dirtpark für BMX, Dirtbike und Mountainbike in Köln-Longerich. Tra1ls e.V." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dirt:   #2b1f0e;
+      --earth:  #4a3520;
+      --trail:  #8b5e2a;
+      --sand:   #c8a86b;
+      --sky:    #d6e4f0;
+      --white:  #f5f0ea;
+      --ink:    #1a1209;
+      --accent: #e8580a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--ink);
+      color: var(--white);
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 64px;
+      background: rgba(26, 18, 9, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(139, 94, 42, 0.25);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-img {
+      height: 38px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sand);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--dirt);
+    }
+
+    /* Vimeo iframe als Vollbild-BG */
+    .hero-video-wrap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .hero-video-iframe {
+      position: absolute;
+      /* 16:9 skaliert so, dass es immer den Container füllt */
+      top: 50%;
+      left: 50%;
+      width: 100vw;
+      height: 56.25vw; /* 16:9 */
+      min-height: 100vh;
+      min-width: 177.78vh; /* 16:9 invers */
+      transform: translate(-50%, -50%);
+      border: 0;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(26, 18, 9, 0.05) 0%,
+        rgba(26, 18, 9, 0.15) 60%,
+        rgba(26, 18, 9, 0.55) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .hero-logo {
+      width: min(520px, 70vw);
+      height: auto;
+      display: block;
+      /* leichter Drop-Shadow damit das Logo auf hellem Footage lesbar bleibt */
+      filter: drop-shadow(0 4px 24px rgba(0,0,0,0.5));
+    }
+
+    /* ── INTRO BLOCK UNTER HERO ── */
+    .intro-wrap {
+      background: var(--white);
+    }
+
+    .intro-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 2.5rem 3rem;
+    }
+
+    .intro-lead {
+      font-size: clamp(1.15rem, 2vw, 1.4rem);
+      line-height: 1.65;
+      color: var(--ink);
+      font-weight: 400;
+      max-width: 100%;
+    }
+
+    /* Zwei Kacheln */
+    .intro-tiles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .intro-tile {
+      padding: 3rem 2.5rem;
+    }
+
+    .intro-tile--zeiten {
+      background: var(--dirt);
+    }
+
+    .intro-tile--nodig {
+      background: var(--earth);
+    }
+
+    .intro-tile-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--sand);
+      margin-bottom: 1rem;
+    }
+
+    .intro-tile p {
+      font-size: 0.95rem;
+      color: rgba(245, 240, 234, 0.7);
+      line-height: 1.65;
+    }
+
+    .intro-tile a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .intro-tile a:hover { text-decoration: underline; }
+
+    .nodig-big {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.5rem, 4vw, 3.5rem) !important;
+      text-transform: uppercase;
+      color: var(--white) !important;
+      line-height: 1 !important;
+      margin-bottom: 1rem !important;
+    }
+
+    @media (max-width: 768px) {
+      .intro-inner { padding: 3rem 1.25rem 2rem; }
+      .intro-tiles { grid-template-columns: 1fr; }
+      .intro-tile { padding: 2.5rem 1.25rem; }
+    }
+
+    /* ── HERO FOTO ── */
+    .hero-foto {
+      width: 100%;
+      line-height: 0;
+    }
+
+    .hero-foto-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 85vh;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* ── SECTION COMMON ── */
+    section {
+      padding: 6rem 2.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, var(--trail), transparent);
+      margin: 0;
+    }
+
+    /* ── ABOUT / NO DIG ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: rgba(245, 240, 234, 0.75);
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+    }
+
+    .nodig-box {
+      background: var(--earth);
+      border-left: 4px solid var(--accent);
+      padding: 2rem;
+    }
+
+    .nodig-box .big {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 2.8rem;
+      text-transform: uppercase;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    .nodig-box p {
+      color: rgba(245, 240, 234, 0.7);
+      font-size: 0.95rem;
+    }
+
+    /* ── PARK INFO CARDS ── */
+    .cards-wrap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--earth);
+      margin-top: 3rem;
+    }
+
+    .card {
+      background: var(--dirt);
+      padding: 2rem;
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      color: rgba(245, 240, 234, 0.65);
+      font-size: 0.9rem;
+    }
+
+    /* ── ÖFFNUNGSZEITEN FULL-WIDTH ── */
+    .oeffnung-wrap {
+      background: var(--earth);
+      padding: 5rem 2.5rem;
+    }
+
+    .oeffnung-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .zeit-list {
+      list-style: none;
+      margin-top: 1.5rem;
+    }
+
+    .zeit-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid rgba(139, 94, 42, 0.3);
+      font-size: 0.95rem;
+      color: rgba(245, 240, 234, 0.8);
+    }
+
+    .zeit-list li strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .zeit-list .closed { color: rgba(245, 240, 234, 0.35); }
+
+    .hinweis {
+      margin-top: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: rgba(232, 88, 10, 0.12);
+      border-left: 3px solid var(--accent);
+      font-size: 0.9rem;
+      color: rgba(245, 240, 234, 0.7);
+    }
+
+    /* ── GALLERY ── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 220px 220px;
+      gap: 4px;
+      margin-top: 2rem;
+    }
+
+    .gallery-item {
+      background-size: cover;
+      background-position: center;
+      background-color: var(--earth);
+    }
+
+    .gallery-item.tall {
+      grid-row: span 2;
+    }
+
+    .gallery-item.wide {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 768px) {
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(3, 180px);
+      }
+      .gallery-item.tall { grid-row: span 1; }
+      .gallery-item.wide { grid-column: span 2; }
+    }
+
+    /* ── BLOG PREVIEW ── */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      margin-top: 3rem;
+      background: var(--earth);
+    }
+
+    .blog-card {
+      background: var(--dirt);
+      padding: 2rem;
+      text-decoration: none;
+      display: block;
+      transition: background 0.2s;
+    }
+
+    .blog-card:hover { background: #3a2a16; }
+
+    .blog-meta {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+    }
+
+    .blog-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+      text-transform: uppercase;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+
+    .blog-card p {
+      font-size: 0.9rem;
+      color: rgba(245, 240, 234, 0.6);
+      line-height: 1.55;
+    }
+
+    /* ── ANFAHRT ── */
+    .anfahrt-wrap {
+      background: #0f0a04;
+      padding: 5rem 2.5rem;
+    }
+
+    .anfahrt-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .anfahrt-detail {
+      margin-top: 2rem;
+    }
+
+    .anfahrt-row {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+
+    .anfahrt-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .anfahrt-row h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sand);
+      margin-bottom: 0.25rem;
+    }
+
+    .anfahrt-row p {
+      font-size: 0.9rem;
+      color: rgba(245, 240, 234, 0.65);
+    }
+
+    .map-placeholder {
+      background: var(--earth);
+      aspect-ratio: 4/3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      color: rgba(245, 240, 234, 0.4);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.9rem;
+      border: 1px solid rgba(139, 94, 42, 0.3);
+    }
+
+    .map-placeholder span { font-size: 2.5rem; }
+
+    .map-link {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.65rem 1.5rem;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .map-link:hover { background: var(--accent); color: var(--white); }
+
+    /* ── MITMACHEN / MITGLIED ── */
+    .join-wrap {
+      background: var(--accent);
+      padding: 5rem 2.5rem;
+      text-align: center;
+    }
+
+    .join-wrap .section-title { color: var(--ink); }
+    .join-wrap p { color: rgba(26,18,9,0.75); max-width: 520px; margin: 0 auto 2rem; }
+
+    .btn-dark {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      background: var(--ink);
+      color: var(--white);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-dark:hover { background: var(--dirt); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      padding: 3rem 2.5rem;
+      border-top: 1px solid rgba(139, 94, 42, 0.2);
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .footer-logo span { color: var(--accent); }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: rgba(245, 240, 234, 0.35);
+      margin-top: 0.5rem;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-links a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 234, 0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .footer-social a {
+      font-size: 1.4rem;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .footer-social a:hover { transform: scale(1.15); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; }
+
+      .nav-links { gap: 1.5rem; }
+      .nav-links a { font-size: 0.85rem; }
+
+      section { padding: 4rem 1.25rem; }
+
+      .hero-logo { width: min(320px, 80vw); }
+
+      .about-grid,
+      .oeffnung-inner,
+      .anfahrt-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+
+      .cards-wrap { grid-template-columns: 1fr; }
+
+      .blog-grid { grid-template-columns: 1fr; }
+
+      .footer-inner { flex-direction: column; gap: 2rem; }
+
+      .oeffnung-wrap, .anfahrt-wrap, .join-wrap { padding: 4rem 1.25rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <img src="https://raw.githubusercontent.com/stefandongus/lunke/main/logos/lunke_motul/1.png" alt="Lunke Trails – powered by Motul" class="nav-logo-img" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="#park">Park</a></li>
+      <li><a href="#anfahrt">Access</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#blog">Blog</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-video-wrap">
+      <iframe
+        src="https://player.vimeo.com/video/1201258540?autoplay=1&muted=1&loop=1&background=1&quality=auto"
+        class="hero-video-iframe"
+        frameborder="0"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen
+        title="Lunke Trails"
+      ></iframe>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <img
+        src="https://raw.githubusercontent.com/stefandongus/lunke/main/logos/lunke_motul/1.png"
+        alt="Lunke Trails – powered by Motul"
+        class="hero-logo"
+      />
+    </div>
+  </div>
+
+  <!-- INTRO TEXT UNTER HERO -->
+  <div class="intro-wrap" id="park">
+    <div class="intro-inner">
+      <p class="intro-lead">Entdecke die Faszination des MTB- und BMX-Sports in unserem spektakulären Park im Kölner Norden. Mit mehr als 50 Jumps auf über 8.400&nbsp;m² bieten wir 8 abwechslungsreiche Strecken und Sprungsektionen für alle Riderlevels.</p>
+    </div>
+    <div class="intro-tiles">
+      <div class="intro-tile intro-tile--zeiten">
+        <h3 class="intro-tile-title">Öffnungszeiten Lunke Trails</h3>
+        <p>Wir können den Park nur öffnen, wenn die Streckenverhältnisse eine Befahrung zulassen. Schau also vorher unbedingt auf unserer <a href="http://instagram.com/lunke_trails_powered_by_motul" target="_blank" rel="noopener">→ Instagram Seite</a> nach, ob der Park an dem Tag wirklich freigegeben ist und sich die Anfahrt für dich auch lohnt.</p>
+      </div>
+      <div class="intro-tile intro-tile--nodig">
+        <p class="nodig-big">No dig,<br>no ride.</p>
+        <p>Einen Dirtpark wie die Lunke Trails zu pflegen, ist viel Arbeit. Wir freuen uns immer, wenn Mitglieder und Gäste mit anpacken und den Park in Schuss halten.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO FOTO -->
+  <div class="hero-foto">
+    <img src="images/home/IMG_2472.jpg" alt="Lunke Trails Park" class="hero-foto-img" />
+  </div>
+
+  <!-- ÖFFNUNGSZEITEN -->
+  <div class="oeffnung-wrap" id="zeiten">
+    <div class="oeffnung-inner">
+      <div>
+        <p class="section-label">Öffnungszeiten</p>
+        <h2 class="section-title">Wann du fahren kannst</h2>
+        <ul class="zeit-list">
+          <li><strong>Montag</strong> <span class="closed">Geschlossen</span></li>
+          <li><strong>Dienstag</strong> <span class="closed">Geschlossen</span></li>
+          <li><strong>Mittwoch</strong> <span>15:00 – Einbruch der Dunkelheit</span></li>
+          <li><strong>Donnerstag</strong> <span class="closed">Geschlossen</span></li>
+          <li><strong>Freitag</strong> <span>15:00 – Einbruch der Dunkelheit</span></li>
+          <li><strong>Samstag</strong> <span>12:00 – Einbruch der Dunkelheit</span></li>
+          <li><strong>Sonntag</strong> <span>12:00 – Einbruch der Dunkelheit</span></li>
+        </ul>
+        <div class="hinweis">
+          Bei starkem Regen oder sehr feuchtem Untergrund bleibt der Park geschlossen. Aktuelle Infos gibt's auf Instagram.
+        </div>
+      </div>
+      <div>
+        <p class="section-label">Regeln</p>
+        <h2 class="section-title">Park-Regeln</h2>
+        <ul class="zeit-list">
+          <li><strong>Helm</strong> <span>Immer Pflicht</span></li>
+          <li><strong>Eintritt</strong> <span>Kostenlos für Mitglieder</span></li>
+          <li><strong>Gäste</strong> <span>Spende erwünscht</span></li>
+          <li><strong>Alkohol</strong> <span>Nicht erlaubt</span></li>
+          <li><strong>Hunde</strong> <span>Nur angeleint</span></li>
+          <li><strong>Fahrbetrieb</strong> <span>Nur bei trockenem Boden</span></li>
+          <li><strong>Müll</strong> <span>Nimm ihn mit</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <section id="gallery">
+    <p class="section-label">Aus dem Park</p>
+    <h2 class="section-title">Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item tall" style="background-image:url('https://images.unsplash.com/photo-1606557864041-38c8b5d2b0c5?w=800&q=80&auto=format&fit=crop')"></div>
+      <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&auto=format&fit=crop')"></div>
+      <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=800&q=80&auto=format&fit=crop')"></div>
+      <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1544191696-15693cd0c57d?w=800&q=80&auto=format&fit=crop')"></div>
+      <div class="gallery-item wide" style="background-image:url('https://images.unsplash.com/photo-1601625868038-aeb0f2d7e5b3?w=1200&q=80&auto=format&fit=crop')"></div>
+    </div>
+    <p style="margin-top:1.5rem;font-size:0.85rem;color:rgba(245,240,234,0.4);font-family:'Barlow Condensed',sans-serif;letter-spacing:0.1em;text-transform:uppercase;">Mehr auf <a href="https://www.instagram.com/lunke_trails_powered_by_motul/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;">@lunke_trails_powered_by_motul</a></p>
+  </section>
+
+  <!-- BLOG -->
+  <section id="blog">
+    <p class="section-label">Aus dem Park</p>
+    <h2 class="section-title">News &amp; Stories</h2>
+    <div class="blog-grid">
+      <a href="#" class="blog-card">
+        <p class="blog-meta">Park-Update</p>
+        <h3>Teppich-Upgrade für Take-off und Landing Zones</h3>
+        <p>Die vielen Starkregenfälle haben uns zugesetzt. Aber damit ist jetzt Schluss — Take-off und Landing Zones bekommen ein komplett neues Carpet-Setup.</p>
+      </a>
+      <a href="#" class="blog-card">
+        <p class="blog-meta">Rider-Portrait</p>
+        <h3>Max Mickan: Projektingenieur am Tag, Onefooter am Abend</h3>
+        <p>Max (28) aus Ehrenfeld geht's strukturiert an — auch auf der Lunke. Was das mit Technoclub zu tun hat, erklärt er uns.</p>
+      </a>
+      <a href="#" class="blog-card">
+        <p class="blog-meta">Shape-Report</p>
+        <h3>Sharkfin nach der Wintersaison: Back in Shape</h3>
+        <p>Mittlerer Teil vom hohen Starthügel, linke Line droppen, erster Sprung rechter Kicker — und dann ab in den edlen Shape.</p>
+      </a>
+      <a href="#" class="blog-card">
+        <p class="blog-meta">Next Generation</p>
+        <h3>Pepe Adam, 9 Jahre — schon im Onehander unterwegs</h3>
+        <p>Vielleicht liegt's am Krav Maga. Pepe reist mit der kompletten Adams Family aus dem Bergischen an. Next generation halt.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- ANFAHRT -->
+  <div class="anfahrt-wrap" id="anfahrt">
+    <div class="anfahrt-inner">
+      <div>
+        <p class="section-label">So findest du uns</p>
+        <h2 class="section-title">Anfahrt</h2>
+        <div class="anfahrt-detail">
+          <div class="anfahrt-row">
+            <span class="anfahrt-icon">🚗</span>
+            <div>
+              <h4>Mit dem Auto</h4>
+              <p>Direkt am Autobahnkreuz A1/A57. Kostenloser Parkplatz am Lindweilerweg. Bitte Rettungswege freihalten!</p>
+            </div>
+          </div>
+          <div class="anfahrt-row">
+            <span class="anfahrt-icon">🚂</span>
+            <div>
+              <h4>S-Bahn</h4>
+              <p>Haltestelle Longerich — Linien S-11 und S-6. Vom Bahnhof nur wenige Minuten mit dem Rad.</p>
+            </div>
+          </div>
+          <div class="anfahrt-row">
+            <span class="anfahrt-icon">🚌</span>
+            <div>
+              <h4>Bus</h4>
+              <p>Linien 121, 125, 127, 139</p>
+            </div>
+          </div>
+          <div class="anfahrt-row">
+            <span class="anfahrt-icon">📍</span>
+            <div>
+              <h4>Adresse</h4>
+              <p>Lindweilerweg, 50769 Köln-Longerich</p>
+            </div>
+          </div>
+        </div>
+        <a href="https://maps.google.com/?q=Lunke+Trails+Köln" target="_blank" rel="noopener" class="map-link">→ Google Maps öffnen</a>
+      </div>
+      <div class="map-placeholder">
+        <span>📍</span>
+        Lunke Trails<br>Köln-Longerich
+        <a href="https://maps.google.com/?q=Lunke+Trails+Köln" target="_blank" rel="noopener" class="map-link" style="margin-top:0;">→ Auf Karte anzeigen</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MITMACHEN / JOIN -->
+  <div class="join-wrap" id="mitmachen">
+    <p class="section-label" style="color: rgba(26,18,9,0.6);">Tra1ls e.V.</p>
+    <h2 class="section-title">Mitglied werden</h2>
+    <p>Als Vereinsmitglied kannst du den Park kostenfrei nutzen, bei Dig-Days mitmachen und hast ein Wörtchen mitzureden, wie sich die Lunke weiterentwickelt.</p>
+    <a href="mailto:info@lunketrails.de" class="btn-dark">→ Kontakt aufnehmen</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <a href="#" class="nav-logo" style="margin-bottom:0.5rem;">
+          <img src="https://raw.githubusercontent.com/stefandongus/lunke/main/logos/lunke_motul/1.png" alt="Lunke Trails" style="height:32px;width:auto;" />
+        </a>
+        <p class="footer-copy">Tra1ls e.V. · Köln-Longerich · Powered by MOTUL</p>
+        <p class="footer-copy" style="margin-top:0.5rem;">© 2025 Lunke Trails | <a href="#" style="color:inherit;">Impressum</a> | <a href="#" style="color:inherit;">Datenschutz</a></p>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#park">Park</a></li>
+        <li><a href="#anfahrt">Access</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#blog">Blog</a></li>
+      </ul>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/lunke_trails_powered_by_motul/" target="_blank" rel="noopener" title="Instagram">📸</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
