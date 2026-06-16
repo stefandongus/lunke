@@ -233,9 +233,21 @@
       max-width: 100%;
     }
 
+    .status-heute {
+      margin-top: 1.25rem;
+      padding: 0.6rem 1rem;
+      background: rgba(255,255,255,0.15);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      display: inline-block;
+    }
+
     .insta-wrap {
       max-width: 1100px;
-      margin: 0 auto;
+      margin: 1.5rem auto 0;
       padding: 0 2.5rem 3rem;
     }
 
@@ -985,18 +997,6 @@
       <p class="intro-lead">Entdecke die Faszination des MTB- und BMX-Sports in unserem spektakulären Park im Kölner Norden. Mit mehr als 50 Jumps auf über 8.400&nbsp;m² bieten wir 8 abwechslungsreiche Strecken und Sprungsektionen für alle Riderlevels.</p>
     </div>
 
-    <!-- INSTAGRAM FEED -->
-    <div class="insta-wrap">
-      <p class="insta-label">Aktuelles auf Instagram · <a href="https://www.instagram.com/lunke_trails_powered_by_motul/" target="_blank" rel="noopener">@lunke_trails_powered_by_motul</a></p>
-      <behold-widget feed-id="kAGHBsCvmM5fqKY34a62"></behold-widget>
-      <script>
-        (() => {
-          const d=document,s=d.createElement("script");s.type="module";
-          s.src="https://w.behold.so/widget.js";d.head.append(s);
-        })();
-      </script>
-    </div>
-
     <div class="intro-tiles">
       <!-- KACHEL LINKS: No Dig No Ride (default) oder Park Status (dynamisch) -->
       <div class="intro-tile intro-tile--nodig" id="statusTile">
@@ -1006,7 +1006,8 @@
         </div>
         <div id="tileStatus" style="display:none">
           <p class="nodig-big" id="statusHeadline"></p>
-          <p>Einen Dirtpark wie die Lunke Trails zu pflegen, ist viel Arbeit. Wir freuen uns immer, wenn Mitglieder und Gäste mit anpacken und den Park in Schuss halten.</p>
+          <p id="statusSubtext"></p>
+          <p id="statusHeute" class="status-heute" style="display:none"></p>
         </div>
       </div>
 
@@ -1028,6 +1029,18 @@
       <p id="parkNews" class="intro-news-text"></p>
     </div>
 
+    <!-- INSTAGRAM FEED -->
+    <div class="insta-wrap">
+      <p class="insta-label">Aktuelles auf Instagram · <a href="https://www.instagram.com/lunke_trails_powered_by_motul/" target="_blank" rel="noopener">@lunke_trails_powered_by_motul</a></p>
+      <behold-widget feed-id="kAGHBsCvmM5fqKY34a62"></behold-widget>
+      <script>
+        (() => {
+          const d=document,s=d.createElement("script");s.type="module";
+          s.src="https://w.behold.so/widget.js";d.head.append(s);
+        })();
+      </script>
+    </div>
+
   </div>
 
   <script>
@@ -1043,7 +1056,7 @@
         const data = {};
         headers.forEach((h, i) => data[h] = values[i] || '');
 
-        // Park Status Kachel — akzeptiert: offen/zu/yes/no/ja/nein
+        // Park Status Kachel
         const statusRaw = (data.park_offen || '').toLowerCase().trim();
         const isOffen = ['offen','yes','ja','open'].includes(statusRaw);
         const isZu    = ['zu','no','nein','closed'].includes(statusRaw);
@@ -1053,8 +1066,18 @@
           document.getElementById('tileNodig').style.display = 'none';
           document.getElementById('tileStatus').style.display = 'block';
           document.getElementById('statusHeadline').textContent = isOffen ? "We're open" : "We're closed";
+          document.getElementById('statusSubtext').textContent = isOffen
+            ? "Komm gerne vorbei, bring dein Rad, Protektoren und gute Laune mit. Die genauen Öffnungszeiten kannst du rechts sehen."
+            : "Im Moment ist der Park geschlossen. Sorry. Die nächsten geplanten Öffnungstermine kannst du rechts sehen.";
           tile.classList.remove('intro-tile--nodig');
           tile.classList.add(isOffen ? 'tile--offen' : 'tile--zu');
+
+          // Öffnungszeit heute
+          if (data.oeffnungszeit_heute && data.oeffnungszeit_heute.trim()) {
+            const heuteEl = document.getElementById('statusHeute');
+            heuteEl.textContent = '🕐 Heute: ' + data.oeffnungszeit_heute.trim();
+            heuteEl.style.display = 'block';
+          }
         }
 
         // Öffnungszeiten 1, 2, 3
