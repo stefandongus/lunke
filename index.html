@@ -157,6 +157,38 @@
       max-width: 100%;
     }
 
+    .insta-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2.5rem 3rem;
+    }
+
+    .insta-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(26, 18, 9, 0.45);
+      margin-bottom: 1.25rem;
+    }
+
+    .insta-label a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .insta-label a:hover { text-decoration: underline; }
+
+    behold-widget {
+      display: block;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .insta-wrap { padding: 0 1.25rem 2.5rem; }
+    }
+
     /* Zwei Kacheln */
     .intro-tiles {
       display: grid;
@@ -816,6 +848,19 @@
     <div class="intro-inner">
       <p class="intro-lead">Entdecke die Faszination des MTB- und BMX-Sports in unserem spektakulären Park im Kölner Norden. Mit mehr als 50 Jumps auf über 8.400&nbsp;m² bieten wir 8 abwechslungsreiche Strecken und Sprungsektionen für alle Riderlevels.</p>
     </div>
+
+    <!-- INSTAGRAM FEED -->
+    <div class="insta-wrap">
+      <p class="insta-label">Aktuelles auf Instagram · <a href="https://www.instagram.com/lunke_trails_powered_by_motul/" target="_blank" rel="noopener">@lunke_trails_powered_by_motul</a></p>
+      <behold-widget feed-id="kAGHBsCvmM5fqKY34a62"></behold-widget>
+      <script>
+        (() => {
+          const d=document,s=d.createElement("script");s.type="module";
+          s.src="https://w.behold.so/widget.js";d.head.append(s);
+        })();
+      </script>
+    </div>
+
     <div class="intro-tiles">
       <div class="intro-tile intro-tile--zeiten">
         <h3 class="intro-tile-title">Öffnungszeiten Lunke Trails</h3>
@@ -844,10 +889,12 @@
   <div class="teaser-wrap">
     <div class="teaser-inner">
       <a href="story.html" class="teaser-item">
+        <h2 class="teaser-title">The Story <span>behind</span></h2>
         <p class="teaser-sub">Der lange Weg nach Longerich</p>
       </a>
       <div class="teaser-divider"></div>
       <a href="supporters.html" class="teaser-item">
+        <h2 class="teaser-title">Great <span>Supporters</span></h2>
         <p class="teaser-sub">Shoutouts an die besten Sponsoren</p>
       </a>
     </div>
