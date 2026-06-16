@@ -591,6 +591,29 @@
       .teaser-divider { display: none; }
     }
 
+    .zeiten-list {
+      list-style: none;
+      margin-top: 0.5rem;
+    }
+
+    .zeiten-list li {
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--white);
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(245, 240, 234, 0.15);
+      line-height: 1.4;
+    }
+
+    .zeiten-list li:last-child { border-bottom: none; }
+
+    .zeiten-list a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .zeiten-list a:hover { text-decoration: underline; }
+
     /* ── GALLERY ── */
     .gallery-grid {
       display: grid;
@@ -966,24 +989,27 @@
     </div>
 
     <div class="intro-tiles">
-      <!-- KACHEL LINKS: Park Status (dynamisch) oder No Dig No Ride (default) -->
-      <div class="intro-tile" id="statusTile">
-        <!-- Default: No Dig No Ride -->
+      <!-- KACHEL LINKS: No Dig No Ride (default) oder Park Status (dynamisch) -->
+      <div class="intro-tile intro-tile--nodig" id="statusTile">
         <div id="tileNodig">
           <p class="nodig-big">No dig,<br>no ride.</p>
           <p>Einen Dirtpark wie die Lunke Trails zu pflegen, ist viel Arbeit. Wir freuen uns immer, wenn Mitglieder und Gäste mit anpacken und den Park in Schuss halten.</p>
         </div>
-        <!-- Dynamisch: We're open / We're closed -->
         <div id="tileStatus" style="display:none">
           <p class="nodig-big" id="statusHeadline"></p>
-          <p id="statusText">Einen Dirtpark wie die Lunke Trails zu pflegen, ist viel Arbeit. Wir freuen uns immer, wenn Mitglieder und Gäste mit anpacken und den Park in Schuss halten.</p>
+          <p>Einen Dirtpark wie die Lunke Trails zu pflegen, ist viel Arbeit. Wir freuen uns immer, wenn Mitglieder und Gäste mit anpacken und den Park in Schuss halten.</p>
         </div>
       </div>
 
       <!-- KACHEL RECHTS: Öffnungszeiten -->
       <div class="intro-tile intro-tile--zeiten">
         <h3 class="intro-tile-title">Unsere nächsten<br>Parköffnungen</h3>
-        <p id="parkZeiten">Wir können den Park nur öffnen, wenn die Streckenverhältnisse eine Befahrung zulassen. Schau also vorher unbedingt auf unserer <a href="http://instagram.com/lunke_trails_powered_by_motul" target="_blank" rel="noopener">→ Instagram Seite</a> nach.</p>
+        <ul class="zeiten-list">
+          <li id="parkZeiten1" style="display:none"></li>
+          <li id="parkZeiten2" style="display:none"></li>
+          <li id="parkZeiten3" style="display:none"></li>
+          <li id="parkZeitenFallback">Aktuelle Termine findet ihr auf unserer <a href="http://instagram.com/lunke_trails_powered_by_motul" target="_blank" rel="noopener">→ Instagram Seite</a>.</li>
+        </ul>
       </div>
     </div>
 
@@ -1016,15 +1042,25 @@
           document.getElementById('tileNodig').style.display = 'none';
           document.getElementById('tileStatus').style.display = 'block';
           document.getElementById('statusHeadline').textContent = isOffen ? "We're open" : "We're closed";
+          tile.classList.remove('intro-tile--nodig');
           tile.classList.add(isOffen ? 'tile--offen' : 'tile--zu');
         }
 
-        // Öffnungszeiten
-        if (data.oeffnungszeiten) {
-          document.getElementById('parkZeiten').textContent = data.oeffnungszeiten;
+        // Öffnungszeiten 1, 2, 3
+        let anyZeiten = false;
+        ['oeffnungszeiten_1','oeffnungszeiten_2','oeffnungszeiten_3'].forEach((key, i) => {
+          const el = document.getElementById(`parkZeiten${i+1}`);
+          if (data[key] && data[key].trim()) {
+            el.textContent = data[key].trim();
+            el.style.display = 'list-item';
+            anyZeiten = true;
+          }
+        });
+        if (anyZeiten) {
+          document.getElementById('parkZeitenFallback').style.display = 'none';
         }
 
-        // News — nur anzeigen wenn befüllt
+        // News
         if (data.news && data.news.trim()) {
           document.getElementById('parkNews').textContent = data.news;
           document.getElementById('newsTile').style.display = 'block';
