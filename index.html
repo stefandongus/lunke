@@ -233,6 +233,17 @@
       max-width: 100%;
     }
 
+    .status-datum {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 234, 0.6);
+      margin-bottom: 0.75rem;
+      margin-top: -0.25rem;
+    }
+
     .status-heute {
       margin-top: 1.25rem;
       padding: 0.6rem 1rem;
@@ -1006,6 +1017,7 @@
         </div>
         <div id="tileStatus" style="display:none">
           <p class="nodig-big" id="statusHeadline"></p>
+          <p id="statusDatum" class="status-datum" style="display:none"></p>
           <p id="statusSubtext"></p>
           <p id="statusHeute" class="status-heute" style="display:none"></p>
         </div>
@@ -1089,6 +1101,12 @@
           document.getElementById('statusSubtext').textContent = isOffen
             ? "Komm gerne vorbei, bring dein Rad, Protektoren und gute Laune mit. Weitere Öffnungszeiten findest du gleich hier."
             : "Im Moment ist der Park geschlossen. Sorry. Die nächsten geplanten Öffnungstermine findest du gleich hier.";
+
+          // Aktuelles Datum
+          const now = new Date();
+          const datum = now.toLocaleDateString('de-DE', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+          document.getElementById('statusDatum').textContent = datum;
+          document.getElementById('statusDatum').style.display = 'block';
           tile.classList.remove('intro-tile--nodig');
           tile.classList.add(isOffen ? 'tile--offen' : 'tile--zu');
 
