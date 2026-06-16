@@ -156,34 +156,52 @@
     }
 
     /* ── PARK STATUS & NEWS ── */
-    .park-status {
+    .park-status { display: none; }
+
+    .tile--offen {
+      background: #1e5c1e !important;
+    }
+
+    .tile--zu {
+      background: #7a1a1a !important;
+    }
+
+    .tile--offen .nodig-big,
+    .tile--zu .nodig-big {
+      color: #fff !important;
+    }
+
+    /* NEWS KACHEL */
+    .intro-news {
       max-width: 1100px;
-      margin: 0 auto;
-      padding: 0.9rem 2.5rem;
+      margin: 1.5rem auto 0;
+      padding: 0 2.5rem;
+    }
+
+    .intro-news > div,
+    .intro-news {
+      background: var(--dirt);
+      padding: 2rem 2.5rem;
+    }
+
+    .intro-news-label {
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: 0.08em;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
     }
 
-    .park-status--offen {
-      background: #2d6a2d;
-      color: #fff;
+    #parkNews {
+      color: rgba(245, 240, 234, 0.85);
+      font-size: 1rem;
+      line-height: 1.65;
     }
 
-    .park-status--zu {
-      background: #8b1a1a;
-      color: #fff;
-    }
-
-    .park-news {
-      margin-top: 1rem;
-      padding: 0.75rem 1rem;
-      background: rgba(232, 88, 10, 0.12);
-      border-left: 3px solid var(--accent);
-      color: var(--ink) !important;
-      font-size: 0.95rem !important;
+    @media (max-width: 768px) {
+      .intro-news { padding: 0 1.25rem; }
     }
 
     /* ── INTRO BLOCK UNTER HERO ── */
@@ -931,13 +949,8 @@
   <!-- INTRO TEXT UNTER HERO -->
   <div class="intro-wrap" id="park">
 
-    <!-- PARK STATUS BANNER (dynamisch) -->
-    <div id="parkStatus" class="park-status" style="display:none"></div>
-
     <div class="intro-inner">
       <p class="intro-lead">Entdecke die Faszination des MTB- und BMX-Sports in unserem spektakulären Park im Kölner Norden. Mit mehr als 50 Jumps auf über 8.400&nbsp;m² bieten wir 8 abwechslungsreiche Strecken und Sprungsektionen für alle Riderlevels.</p>
-      <!-- NEWS (dynamisch) -->
-      <p id="parkNews" class="park-news" style="display:none"></p>
     </div>
 
     <!-- INSTAGRAM FEED -->
@@ -953,19 +966,36 @@
     </div>
 
     <div class="intro-tiles">
-      <div class="intro-tile intro-tile--zeiten">
-        <h3 class="intro-tile-title">Öffnungszeiten Lunke Trails</h3>
-        <p id="parkZeiten">Wir können den Park nur öffnen, wenn die Streckenverhältnisse eine Befahrung zulassen. Schau also vorher unbedingt auf unserer <a href="http://instagram.com/lunke_trails_powered_by_motul" target="_blank" rel="noopener">→ Instagram Seite</a> nach, ob der Park an dem Tag wirklich freigegeben ist und sich die Anfahrt für dich auch lohnt.</p>
+      <!-- KACHEL LINKS: Park Status (dynamisch) oder No Dig No Ride (default) -->
+      <div class="intro-tile" id="statusTile">
+        <!-- Default: No Dig No Ride -->
+        <div id="tileNodig">
+          <p class="nodig-big">No dig,<br>no ride.</p>
+          <p>Einen Dirtpark wie die Lunke Trails zu pflegen, ist viel Arbeit. Wir freuen uns immer, wenn Mitglieder und Gäste mit anpacken und den Park in Schuss halten.</p>
+        </div>
+        <!-- Dynamisch: We're open / We're closed -->
+        <div id="tileStatus" style="display:none">
+          <p class="nodig-big" id="statusHeadline"></p>
+          <p id="statusText">Einen Dirtpark wie die Lunke Trails zu pflegen, ist viel Arbeit. Wir freuen uns immer, wenn Mitglieder und Gäste mit anpacken und den Park in Schuss halten.</p>
+        </div>
       </div>
-      <div class="intro-tile intro-tile--nodig">
-        <p class="nodig-big">No dig,<br>no ride.</p>
-        <p>Einen Dirtpark wie die Lunke Trails zu pflegen, ist viel Arbeit. Wir freuen uns immer, wenn Mitglieder und Gäste mit anpacken und den Park in Schuss halten.</p>
+
+      <!-- KACHEL RECHTS: Öffnungszeiten -->
+      <div class="intro-tile intro-tile--zeiten">
+        <h3 class="intro-tile-title">Unsere nächsten<br>Parköffnungen</h3>
+        <p id="parkZeiten">Wir können den Park nur öffnen, wenn die Streckenverhältnisse eine Befahrung zulassen. Schau also vorher unbedingt auf unserer <a href="http://instagram.com/lunke_trails_powered_by_motul" target="_blank" rel="noopener">→ Instagram Seite</a> nach.</p>
       </div>
     </div>
+
+    <!-- NEWS KACHEL (nur wenn befüllt) -->
+    <div id="newsTile" class="intro-news" style="display:none">
+      <p class="intro-news-label">News</p>
+      <p id="parkNews"></p>
+    </div>
+
   </div>
 
   <script>
-    // Google Sheets CSV laden
     const SHEET_ID = '1n5vq-sumrb-FdBI710BHaWjJo1ulDCKT07nD0r-22i0';
     const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
 
@@ -973,19 +1003,20 @@
       .then(r => r.text())
       .then(csv => {
         const rows = csv.trim().split('\n');
-        // Zeile 0 = Header, Zeile 1 = Werte
         const headers = rows[0].split(',').map(h => h.trim().replace(/"/g,''));
         const values  = rows[1].split(',').map(v => v.trim().replace(/"/g,''));
         const data = {};
         headers.forEach((h, i) => data[h] = values[i] || '');
 
-        // Park offen Banner
-        const statusEl = document.getElementById('parkStatus');
-        if (data.park_offen) {
-          const offen = data.park_offen.toLowerCase() === 'ja';
-          statusEl.textContent = offen ? '✓ Park heute geöffnet' : '✗ Park heute geschlossen';
-          statusEl.classList.add(offen ? 'park-status--offen' : 'park-status--zu');
-          statusEl.style.display = 'block';
+        // Park Status Kachel
+        const status = (data.park_offen || '').toLowerCase();
+        if (status === 'offen' || status === 'zu') {
+          const isOffen = status === 'offen';
+          const tile = document.getElementById('statusTile');
+          document.getElementById('tileNodig').style.display = 'none';
+          document.getElementById('tileStatus').style.display = 'block';
+          document.getElementById('statusHeadline').textContent = isOffen ? "We're open" : "We're closed";
+          tile.classList.add(isOffen ? 'tile--offen' : 'tile--zu');
         }
 
         // Öffnungszeiten
@@ -993,14 +1024,13 @@
           document.getElementById('parkZeiten').textContent = data.oeffnungszeiten;
         }
 
-        // News
-        if (data.news) {
-          const newsEl = document.getElementById('parkNews');
-          newsEl.textContent = '📣 ' + data.news;
-          newsEl.style.display = 'block';
+        // News — nur anzeigen wenn befüllt
+        if (data.news && data.news.trim()) {
+          document.getElementById('parkNews').textContent = data.news;
+          document.getElementById('newsTile').style.display = 'block';
         }
       })
-      .catch(() => {}); // Falls Sheet nicht erreichbar → Fallback-Texte bleiben
+      .catch(() => {});
   </script>
 
   <!-- HERO FOTO -->
