@@ -97,6 +97,21 @@
       pointer-events: none;
     }
 
+    .hero-facade {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .hero-facade-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* iframe kommt über Facade */
     .hero-video-iframe {
       position: absolute;
       /* 16:9 skaliert so, dass es immer den Container füllt */
@@ -823,15 +838,16 @@
 
   <!-- HERO -->
   <div class="hero">
-    <div class="hero-video-wrap">
-      <iframe
-        src="https://player.vimeo.com/video/1201258540?autoplay=1&muted=1&loop=1&background=1&quality=auto"
-        class="hero-video-iframe"
-        frameborder="0"
-        allow="autoplay; fullscreen; picture-in-picture"
-        allowfullscreen
-        title="Lunke Trails"
-      ></iframe>
+    <!-- FACADE: Standbild sofort sichtbar, iframe lädt erst wenn bereit -->
+    <div class="hero-video-wrap" id="heroFacade">
+      <div class="hero-facade" id="heroFacadeInner">
+        <img
+          src="image/home/IMG_2472.jpg"
+          alt="Lunke Trails"
+          class="hero-facade-img"
+          fetchpriority="high"
+        />
+      </div>
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
@@ -842,6 +858,38 @@
       />
     </div>
   </div>
+
+  <script src="https://player.vimeo.com/api/player.js"></script>
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const wrap = document.getElementById('heroFacade');
+        const facade = document.getElementById('heroFacadeInner');
+
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://player.vimeo.com/video/1201258540?autoplay=1&muted=1&loop=1&background=1&autopause=0&quality=auto';
+        iframe.className = 'hero-video-iframe';
+        iframe.frameBorder = '0';
+        iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.title = 'Lunke Trails';
+        wrap.appendChild(iframe);
+
+        const player = new Vimeo.Player(iframe);
+
+        // Sicherstellen dass wirklich abgespielt wird
+        player.ready().then(() => {
+          player.setVolume(0);
+          player.play().catch(() => {});
+          setTimeout(() => {
+            facade.style.opacity = '0';
+            facade.style.transition = 'opacity 1.2s ease';
+            setTimeout(() => facade.remove(), 1300);
+          }, 1000);
+        });
+      }, 300);
+    });
+  </script>
 
   <!-- INTRO TEXT UNTER HERO -->
   <div class="intro-wrap" id="park">
