@@ -172,16 +172,18 @@
     }
 
     /* NEWS KACHEL */
-    .intro-news {
+    .intro-news-tile {
       max-width: 1100px;
       margin: 1.5rem auto 0;
       padding: 0 2.5rem;
     }
 
-    .intro-news > div,
-    .intro-news {
-      background: var(--dirt);
-      padding: 2rem 2.5rem;
+    .intro-news-tile > * {
+      background: var(--accent);
+    }
+
+    .intro-news-tile {
+      background: transparent;
     }
 
     .intro-news-label {
@@ -190,18 +192,25 @@
       font-size: 0.8rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
+      color: rgba(245, 240, 234, 0.6);
+      display: block;
+      padding: 1.25rem 2.5rem 0;
+      background: var(--dirt);
     }
 
-    #parkNews {
-      color: rgba(245, 240, 234, 0.85);
-      font-size: 1rem;
-      line-height: 1.65;
+    .intro-news-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      line-height: 1.2;
+      color: var(--white);
+      padding: 0.75rem 2.5rem 2rem;
+      background: var(--dirt);
+      margin: 0;
     }
 
     @media (max-width: 768px) {
-      .intro-news { padding: 0 1.25rem; }
+      .intro-news-tile { padding: 0 1.25rem; }
     }
 
     /* ── INTRO BLOCK UNTER HERO ── */
@@ -1014,9 +1023,9 @@
     </div>
 
     <!-- NEWS KACHEL (nur wenn befüllt) -->
-    <div id="newsTile" class="intro-news" style="display:none">
+    <div id="newsTile" class="intro-news-tile" style="display:none">
       <p class="intro-news-label">News</p>
-      <p id="parkNews"></p>
+      <p id="parkNews" class="intro-news-text"></p>
     </div>
 
   </div>
@@ -1034,10 +1043,12 @@
         const data = {};
         headers.forEach((h, i) => data[h] = values[i] || '');
 
-        // Park Status Kachel
-        const status = (data.park_offen || '').toLowerCase();
-        if (status === 'offen' || status === 'zu') {
-          const isOffen = status === 'offen';
+        // Park Status Kachel — akzeptiert: offen/zu/yes/no/ja/nein
+        const statusRaw = (data.park_offen || '').toLowerCase().trim();
+        const isOffen = ['offen','yes','ja','open'].includes(statusRaw);
+        const isZu    = ['zu','no','nein','closed'].includes(statusRaw);
+
+        if (isOffen || isZu) {
           const tile = document.getElementById('statusTile');
           document.getElementById('tileNodig').style.display = 'none';
           document.getElementById('tileStatus').style.display = 'block';
