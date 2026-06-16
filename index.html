@@ -211,6 +211,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0;
+      margin-bottom: 5rem;
     }
 
     .intro-tile {
@@ -227,12 +228,12 @@
 
     .intro-tile-title {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 1.1rem;
+      font-weight: 900;
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--sand);
-      margin-bottom: 1rem;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 1.25rem;
     }
 
     .intro-tile p {
