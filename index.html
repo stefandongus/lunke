@@ -155,6 +155,37 @@
       filter: drop-shadow(0 4px 24px rgba(0,0,0,0.5));
     }
 
+    /* ── PARK STATUS & NEWS ── */
+    .park-status {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.9rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .park-status--offen {
+      background: #2d6a2d;
+      color: #fff;
+    }
+
+    .park-status--zu {
+      background: #8b1a1a;
+      color: #fff;
+    }
+
+    .park-news {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      background: rgba(232, 88, 10, 0.12);
+      border-left: 3px solid var(--accent);
+      color: var(--ink) !important;
+      font-size: 0.95rem !important;
+    }
+
     /* ── INTRO BLOCK UNTER HERO ── */
     .intro-wrap {
       background: var(--white);
@@ -899,8 +930,14 @@
 
   <!-- INTRO TEXT UNTER HERO -->
   <div class="intro-wrap" id="park">
+
+    <!-- PARK STATUS BANNER (dynamisch) -->
+    <div id="parkStatus" class="park-status" style="display:none"></div>
+
     <div class="intro-inner">
       <p class="intro-lead">Entdecke die Faszination des MTB- und BMX-Sports in unserem spektakulären Park im Kölner Norden. Mit mehr als 50 Jumps auf über 8.400&nbsp;m² bieten wir 8 abwechslungsreiche Strecken und Sprungsektionen für alle Riderlevels.</p>
+      <!-- NEWS (dynamisch) -->
+      <p id="parkNews" class="park-news" style="display:none"></p>
     </div>
 
     <!-- INSTAGRAM FEED -->
@@ -918,7 +955,7 @@
     <div class="intro-tiles">
       <div class="intro-tile intro-tile--zeiten">
         <h3 class="intro-tile-title">Öffnungszeiten Lunke Trails</h3>
-        <p>Wir können den Park nur öffnen, wenn die Streckenverhältnisse eine Befahrung zulassen. Schau also vorher unbedingt auf unserer <a href="http://instagram.com/lunke_trails_powered_by_motul" target="_blank" rel="noopener">→ Instagram Seite</a> nach, ob der Park an dem Tag wirklich freigegeben ist und sich die Anfahrt für dich auch lohnt.</p>
+        <p id="parkZeiten">Wir können den Park nur öffnen, wenn die Streckenverhältnisse eine Befahrung zulassen. Schau also vorher unbedingt auf unserer <a href="http://instagram.com/lunke_trails_powered_by_motul" target="_blank" rel="noopener">→ Instagram Seite</a> nach, ob der Park an dem Tag wirklich freigegeben ist und sich die Anfahrt für dich auch lohnt.</p>
       </div>
       <div class="intro-tile intro-tile--nodig">
         <p class="nodig-big">No dig,<br>no ride.</p>
@@ -926,6 +963,45 @@
       </div>
     </div>
   </div>
+
+  <script>
+    // Google Sheets CSV laden
+    const SHEET_ID = '1n5vq-sumrb-FdBI710BHaWjJo1ulDCKT07nD0r-22i0';
+    const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+
+    fetch(CSV_URL)
+      .then(r => r.text())
+      .then(csv => {
+        const rows = csv.trim().split('\n');
+        // Zeile 0 = Header, Zeile 1 = Werte
+        const headers = rows[0].split(',').map(h => h.trim().replace(/"/g,''));
+        const values  = rows[1].split(',').map(v => v.trim().replace(/"/g,''));
+        const data = {};
+        headers.forEach((h, i) => data[h] = values[i] || '');
+
+        // Park offen Banner
+        const statusEl = document.getElementById('parkStatus');
+        if (data.park_offen) {
+          const offen = data.park_offen.toLowerCase() === 'ja';
+          statusEl.textContent = offen ? '✓ Park heute geöffnet' : '✗ Park heute geschlossen';
+          statusEl.classList.add(offen ? 'park-status--offen' : 'park-status--zu');
+          statusEl.style.display = 'block';
+        }
+
+        // Öffnungszeiten
+        if (data.oeffnungszeiten) {
+          document.getElementById('parkZeiten').textContent = data.oeffnungszeiten;
+        }
+
+        // News
+        if (data.news) {
+          const newsEl = document.getElementById('parkNews');
+          newsEl.textContent = '📣 ' + data.news;
+          newsEl.style.display = 'block';
+        }
+      })
+      .catch(() => {}); // Falls Sheet nicht erreichbar → Fallback-Texte bleiben
+  </script>
 
   <!-- HERO FOTO -->
   <div class="hero-foto">
