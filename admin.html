@@ -209,7 +209,62 @@
     .field input::placeholder,
     .field textarea::placeholder { color: rgba(245,240,234,0.25); }
 
-    .fields-stack { display: flex; flex-direction: column; gap: 0.75rem; }
+    .termin-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 0.5rem;
+      align-items: end;
+    }
+
+    .termin-sep {
+      text-align: center;
+      color: rgba(245,240,234,0.3);
+      font-size: 0.85rem;
+      padding: 0.4rem 0;
+      align-self: end;
+      padding-bottom: 0.85rem;
+    }
+
+    .field select {
+      width: 100%;
+      padding: 0.75rem 0.5rem;
+      background: var(--earth);
+      border: 1px solid rgba(200,168,107,0.2);
+      border-radius: 8px;
+      color: var(--white);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c8a86b' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      cursor: pointer;
+    }
+
+    .field select:focus { border-color: var(--accent); }
+
+    .termin-preview {
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-top: 0.3rem;
+      font-weight: 600;
+      min-height: 1.2rem;
+    }
+
+    .termin-clear {
+      background: none;
+      border: none;
+      color: rgba(245,240,234,0.3);
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 0;
+      font-family: inherit;
+      margin-top: 0.25rem;
+    }
+
+    .termin-clear:hover { color: var(--accent); }
 
     /* ── SAVE BUTTON ── */
     .save-btn {
@@ -298,17 +353,55 @@
       <div class="card">
         <p class="card-title">Nächste Parköffnungen</p>
         <div class="fields-stack">
+          <!-- TERMIN 1 -->
           <div class="field">
             <label>Termin 1</label>
-            <input type="text" id="z1" placeholder="z.B. Sa 21.06. ab 12:00" />
+            <div class="termin-row">
+              <select id="z1_tag"><option value="">— Tag —</option></select>
+              <select id="z1_von_h"><option value="">Std</option></select>
+              <select id="z1_von_m"><option value="">Min</option></select>
+            </div>
+            <div class="termin-row" style="margin-top:0.4rem">
+              <select id="z1_bis_h"><option value="">bis Std</option></select>
+              <select id="z1_bis_m"><option value="">Min</option></select>
+              <div></div>
+            </div>
+            <p class="termin-preview" id="z1_preview"></p>
+            <button class="termin-clear" onclick="clearTermin(1)">✕ Termin leeren</button>
           </div>
+
+          <!-- TERMIN 2 -->
           <div class="field">
             <label>Termin 2</label>
-            <input type="text" id="z2" placeholder="z.B. So 22.06. ab 12:00" />
+            <div class="termin-row">
+              <select id="z2_tag"><option value="">— Tag —</option></select>
+              <select id="z2_von_h"><option value="">Std</option></select>
+              <select id="z2_von_m"><option value="">Min</option></select>
+            </div>
+            <div class="termin-row" style="margin-top:0.4rem">
+              <select id="z2_bis_h"><option value="">bis Std</option></select>
+              <select id="z2_bis_m"><option value="">Min</option></select>
+              <div></div>
+            </div>
+            <p class="termin-preview" id="z2_preview"></p>
+            <button class="termin-clear" onclick="clearTermin(2)">✕ Termin leeren</button>
           </div>
+
+          <!-- TERMIN 3 -->
           <div class="field">
             <label>Termin 3</label>
-            <input type="text" id="z3" placeholder="z.B. Mi 25.06. ab 15:00" />
+            <div class="termin-row">
+              <select id="z3_tag"><option value="">— Tag —</option></select>
+              <select id="z3_von_h"><option value="">Std</option></select>
+              <select id="z3_von_m"><option value="">Min</option></select>
+            </div>
+            <div class="termin-row" style="margin-top:0.4rem">
+              <select id="z3_bis_h"><option value="">bis Std</option></select>
+              <select id="z3_bis_m"><option value="">Min</option></select>
+              <div></div>
+            </div>
+            <p class="termin-preview" id="z3_preview"></p>
+            <button class="termin-clear" onclick="clearTermin(3)">✕ Termin leeren</button>
           </div>
         </div>
       </div>
@@ -337,7 +430,113 @@
 
     let currentStatus = 'none';
 
+    const TAGE = ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
+    const MINUTEN = ['00','15','30','45'];
+
+    // Dropdowns befüllen
+    function initDropdowns() {
+      [1,2,3].forEach(n => {
+        // Tag
+        const tagSel = document.getElementById(`z${n}_tag`);
+        TAGE.forEach(t => tagSel.add(new Option(t, t)));
+
+        // Stunden Von
+        const vonH = document.getElementById(`z${n}_von_h`);
+        for (let h = 0; h <= 23; h++) vonH.add(new Option(`${h}:`, String(h)));
+
+        // Minuten Von
+        const vonM = document.getElementById(`z${n}_von_m`);
+        MINUTEN.forEach(m => vonM.add(new Option(m, m)));
+
+        // Stunden Bis
+        const bisH = document.getElementById(`z${n}_bis_h`);
+        bisH.add(new Option('Open End', 'open-end'));
+        for (let h = 0; h <= 23; h++) bisH.add(new Option(`${h}:`, String(h)));
+
+        // Minuten Bis
+        const bisM = document.getElementById(`z${n}_bis_m`);
+        MINUTEN.forEach(m => bisM.add(new Option(m, m)));
+
+        // Preview bei Änderung
+        [`z${n}_tag`,`z${n}_von_h`,`z${n}_von_m`,`z${n}_bis_h`,`z${n}_bis_m`].forEach(id => {
+          document.getElementById(id).addEventListener('change', () => updatePreview(n));
+        });
+
+        // Bis-Minuten ausblenden wenn Open End
+        document.getElementById(`z${n}_bis_h`).addEventListener('change', () => {
+          const isOpenEnd = document.getElementById(`z${n}_bis_h`).value === 'open-end';
+          document.getElementById(`z${n}_bis_m`).style.visibility = isOpenEnd ? 'hidden' : 'visible';
+        });
+      });
+    }
+
+    function updatePreview(n) {
+      const tag   = document.getElementById(`z${n}_tag`).value;
+      const vonH  = document.getElementById(`z${n}_von_h`).value;
+      const vonM  = document.getElementById(`z${n}_von_m`).value;
+      const bisH  = document.getElementById(`z${n}_bis_h`).value;
+      const bisM  = document.getElementById(`z${n}_bis_m`).value;
+      const prev  = document.getElementById(`z${n}_preview`);
+
+      if (!tag || !vonH || !vonM) { prev.textContent = ''; return; }
+
+      let text = `${tag}, ${vonH}:${vonM} Uhr`;
+      if (bisH === 'open-end') text += ' – Open End';
+      else if (bisH) text += ` – ${bisH}:${bisM || '00'} Uhr`;
+
+      prev.textContent = '→ ' + text;
+    }
+
+    function buildTerminString(n) {
+      const tag   = document.getElementById(`z${n}_tag`).value;
+      const vonH  = document.getElementById(`z${n}_von_h`).value;
+      const vonM  = document.getElementById(`z${n}_von_m`).value;
+      const bisH  = document.getElementById(`z${n}_bis_h`).value;
+      const bisM  = document.getElementById(`z${n}_bis_m`).value;
+
+      if (!tag || !vonH || !vonM) return '';
+
+      let text = `${tag}, ${vonH}:${vonM} Uhr`;
+      if (bisH === 'open-end') text += ' – Open End';
+      else if (bisH) text += ` – ${bisH}:${bisM || '00'} Uhr`;
+      return text;
+    }
+
+    function clearTermin(n) {
+      [`z${n}_tag`,`z${n}_von_h`,`z${n}_von_m`,`z${n}_bis_h`,`z${n}_bis_m`].forEach(id => {
+        document.getElementById(id).selectedIndex = 0;
+      });
+      document.getElementById(`z${n}_bis_m`).style.visibility = 'visible';
+      document.getElementById(`z${n}_preview`).textContent = '';
+    }
+
+    // Gespeicherten Termin-String zurück in Dropdowns laden
+    function parseTerminIntoDropdowns(n, str) {
+      if (!str) return;
+      // Format: "Samstag, 12:00 Uhr – 20:00 Uhr" oder "Samstag, 12:00 Uhr – Open End"
+      const tagMatch = str.match(/^(\w+),/);
+      const vonMatch = str.match(/,\s*(\d+):(\d+)/);
+      const bisMatch = str.match(/–\s*(\d+):(\d+)/);
+      const openEnd  = str.includes('Open End');
+
+      if (tagMatch) document.getElementById(`z${n}_tag`).value = tagMatch[1];
+      if (vonMatch) {
+        document.getElementById(`z${n}_von_h`).value = String(parseInt(vonMatch[1]));
+        document.getElementById(`z${n}_von_m`).value = vonMatch[2];
+      }
+      if (openEnd) {
+        document.getElementById(`z${n}_bis_h`).value = 'open-end';
+        document.getElementById(`z${n}_bis_m`).style.visibility = 'hidden';
+      } else if (bisMatch) {
+        document.getElementById(`z${n}_bis_h`).value = String(parseInt(bisMatch[1]));
+        document.getElementById(`z${n}_bis_m`).value = bisMatch[2];
+      }
+      updatePreview(n);
+    }
+
     // ── LOGIN ──
+    initDropdowns();
+
     document.getElementById('pwInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') doLogin();
     });
@@ -416,9 +615,9 @@
 
           // Felder
           document.getElementById('heuteInput').value = data.oeffnungszeit_heute || '';
-          document.getElementById('z1').value = data.oeffnungszeiten_1 || '';
-          document.getElementById('z2').value = data.oeffnungszeiten_2 || '';
-          document.getElementById('z3').value = data.oeffnungszeiten_3 || '';
+          parseTerminIntoDropdowns(1, data.oeffnungszeiten_1 || '');
+          parseTerminIntoDropdowns(2, data.oeffnungszeiten_2 || '');
+          parseTerminIntoDropdowns(3, data.oeffnungszeiten_3 || '');
           document.getElementById('newsInput').value = data.news || '';
         })
         .catch(() => {});
@@ -435,9 +634,9 @@
       const payload = {
         park_offen:          statusMap[currentStatus],
         oeffnungszeit_heute: document.getElementById('heuteInput').value.trim(),
-        oeffnungszeiten_1:   document.getElementById('z1').value.trim(),
-        oeffnungszeiten_2:   document.getElementById('z2').value.trim(),
-        oeffnungszeiten_3:   document.getElementById('z3').value.trim(),
+        oeffnungszeiten_1:   buildTerminString(1),
+        oeffnungszeiten_2:   buildTerminString(2),
+        oeffnungszeiten_3:   buildTerminString(3),
         news:                document.getElementById('newsInput').value.trim(),
       };
 
