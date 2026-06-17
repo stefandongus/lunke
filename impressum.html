@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Impressum – Lunke Trails</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dirt: #2b1f0e; --earth: #4a3520; --sand: #c8a86b;
+      --white: #f5f0ea; --ink: #1a1209; --accent: #e8580a;
+    }
+    body { font-family: 'Barlow', sans-serif; background: var(--ink); color: var(--white); font-size: 17px; line-height: 1.6; }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 64px;
+      background: rgba(26,18,9,0.97);
+      border-bottom: 1px solid rgba(139,94,42,0.25);
+    }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 38px; width: auto; }
+    .nav-back { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sand); text-decoration: none; }
+    .nav-back:hover { color: var(--accent); }
+
+    .page-wrap { max-width: 780px; margin: 0 auto; padding: 5rem 2.5rem 6rem; }
+
+    .page-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; display: block; }
+
+    .page-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(2.5rem, 6vw, 4rem); text-transform: uppercase; line-height: 1; color: var(--white); margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(139,94,42,0.3); }
+
+    .impr-section { margin-bottom: 2.5rem; }
+
+    .impr-section h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--sand); margin-bottom: 0.75rem; }
+
+    .impr-section p { color: rgba(245,240,234,0.72); font-size: 0.95rem; line-height: 1.8; }
+
+    .impr-section a { color: var(--accent); text-decoration: none; }
+    .impr-section a:hover { text-decoration: underline; }
+
+    .divider { border: none; border-top: 1px solid rgba(139,94,42,0.2); margin: 2rem 0; }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; }
+      .page-wrap { padding: 3rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <img src="https://raw.githubusercontent.com/stefandongus/lunke/main/logos/lunke_motul/1.png" alt="Lunke Trails" />
+    </a>
+    <a href="index.html" class="nav-back">← Zurück</a>
+  </nav>
+
+  <div class="page-wrap">
+    <span class="page-label">Tra1ls e.V.</span>
+    <h1 class="page-title">Impressum</h1>
+
+    <div class="impr-section">
+      <h2>Angaben gemäß § 5 TMG</h2>
+      <p>
+        Tra1ls e.V.<br>
+        Markomannenstr. 17<br>
+        50679 Köln<br><br>
+        Vereinsregister: VR 20572<br>
+        Registergericht: Amtsgericht Köln
+      </p>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="impr-section">
+      <h2>Vertreten durch</h2>
+      <p>
+        1. Vorsitzender: Andreas Kittel<br>
+        Freiherr vom Stein Str. 14<br>
+        50321 Brühl
+      </p>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="impr-section">
+      <h2>Kontakt</h2>
+      <p>E-Mail: <a href="mailto:info@tra1ls.de">info@tra1ls.de</a></p>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="impr-section">
+      <h2>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
+      <p>
+        Tra1ls e.V.<br>
+        Markomannenstr. 17<br>
+        50679 Köln
+      </p>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="impr-section">
+      <h2>Webdesign</h2>
+      <p>Stefan Dongus · <a href="mailto:stefan@dongus.net">stefan@dongus.net</a></p>
+    </div>
+
+  </div>
+
+</body>
+</html>
