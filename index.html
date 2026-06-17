@@ -925,10 +925,13 @@
     .footer-logo span { color: var(--accent); }
 
     .footer-copy {
-      font-size: 0.8rem;
-      color: rgba(245, 240, 234, 0.35);
+      font-size: 1rem;
+      color: rgba(245, 240, 234, 0.6);
       margin-top: 0.5rem;
     }
+
+    .footer-copy a { color: inherit; text-decoration: none; }
+    .footer-copy a:hover { color: var(--accent); }
 
     .footer-links {
       list-style: none;
@@ -1260,7 +1263,7 @@
       <div class="gallery-item gallery-placeholder"></div>
       <div class="gallery-item wide gallery-placeholder"></div>
     </div>
-    <div id="galleryMore" style="display:none;text-align:center;margin-top:2rem;padding-bottom:2rem;display:flex;gap:1rem;justify-content:center;">
+    <div id="galleryMore" style="display:none;gap:1rem;justify-content:center;margin-top:2rem;padding-bottom:2rem;">
       <button class="gallery-load-more" id="galleryMoreBtn" onclick="showMoreGallery()" style="display:none">+ Mehr laden</button>
       <button class="gallery-load-more" id="galleryLessBtn" onclick="showLessGallery()" style="display:none">− Weniger</button>
     </div>
@@ -1300,7 +1303,9 @@
     function updateGalleryButtons() {
       document.getElementById('galleryMoreBtn').style.display = galleryShown < allGalleryImages.length ? 'inline-block' : 'none';
       document.getElementById('galleryLessBtn').style.display = galleryShown > GALLERY_PAGE_SIZE ? 'inline-block' : 'none';
-      document.getElementById('galleryMore').style.display = 'flex';
+      // Buttons-Container nur anzeigen wenn mindestens ein Button sichtbar ist
+      const showContainer = galleryShown < allGalleryImages.length || galleryShown > GALLERY_PAGE_SIZE;
+      document.getElementById('galleryMore').style.display = showContainer ? 'flex' : 'none';
     }
 
     function renderGalleryItems(images) {
