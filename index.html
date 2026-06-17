@@ -1271,21 +1271,23 @@
   </div>
 
   <script>
-    const GALLERY_WORKER = 'https://lunke-github-proxy.stefan-cc2.workers.dev';
     const GALLERY_PAGE_SIZE = 6;
     let allGalleryImages = [];
     let galleryShown = 0;
 
     async function loadSiteGallery() {
       try {
-        const res = await fetch(`${GALLERY_WORKER}?path=${encodeURIComponent('image/gallery')}`);
+        const res = await fetch('https://api.github.com/repos/stefandongus/lunke/contents/image/gallery', {
+          headers: { 'Accept': 'application/vnd.github+json' }
+        });
         if (!res.ok) return;
         const files = await res.json();
 
         allGalleryImages = files
           .filter(f => /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name))
-          .reverse(); // neueste zuerst
+          .reverse();
 
+        const grid = document.getElementById('galleryGrid');
         grid.innerHTML = '';
         galleryShown = 0;
 
