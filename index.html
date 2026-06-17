@@ -723,19 +723,34 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 2px;
-      margin-top: 3rem;
       background: var(--earth);
     }
 
     .blog-card {
       background: var(--dirt);
-      padding: 2rem;
       text-decoration: none;
       display: block;
       transition: background 0.2s;
     }
 
     .blog-card:hover { background: #3a2a16; }
+
+    .blog-card-img {
+      width: 100%;
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .blog-card-body {
+      padding: 1.5rem 2rem 2rem;
+    }
+
+    .blog-placeholder {
+      min-height: 260px;
+      background: var(--earth);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
 
     .blog-meta {
       font-size: 0.78rem;
@@ -1301,31 +1316,92 @@
 
   <!-- BLOG -->
   <section id="blog">
-    <p class="section-label">Aus dem Park</p>
-    <h2 class="section-title">News &amp; Stories</h2>
-    <div class="blog-grid">
-      <a href="#" class="blog-card">
-        <p class="blog-meta">Park-Update</p>
-        <h3>Teppich-Upgrade für Take-off und Landing Zones</h3>
-        <p>Die vielen Starkregenfälle haben uns zugesetzt. Aber damit ist jetzt Schluss — Take-off und Landing Zones bekommen ein komplett neues Carpet-Setup.</p>
-      </a>
-      <a href="#" class="blog-card">
-        <p class="blog-meta">Rider-Portrait</p>
-        <h3>Max Mickan: Projektingenieur am Tag, Onefooter am Abend</h3>
-        <p>Max (28) aus Ehrenfeld geht's strukturiert an — auch auf der Lunke. Was das mit Technoclub zu tun hat, erklärt er uns.</p>
-      </a>
-      <a href="#" class="blog-card">
-        <p class="blog-meta">Shape-Report</p>
-        <h3>Sharkfin nach der Wintersaison: Back in Shape</h3>
-        <p>Mittlerer Teil vom hohen Starthügel, linke Line droppen, erster Sprung rechter Kicker — und dann ab in den edlen Shape.</p>
-      </a>
-      <a href="#" class="blog-card">
-        <p class="blog-meta">Next Generation</p>
-        <h3>Pepe Adam, 9 Jahre — schon im Onehander unterwegs</h3>
-        <p>Vielleicht liegt's am Krav Maga. Pepe reist mit der kompletten Adams Family aus dem Bergischen an. Next generation halt.</p>
-      </a>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+      <div>
+        <p class="section-label">Aus dem Park</p>
+        <h2 class="section-title" style="margin-bottom:0">News &amp; Stories</h2>
+      </div>
+      <a href="blog.html" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.9rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);text-decoration:none;">Alle Posts →</a>
+    </div>
+    <div class="blog-grid" id="blogGrid">
+      <!-- wird dynamisch geladen -->
+      <div class="blog-card blog-placeholder"></div>
+      <div class="blog-card blog-placeholder"></div>
+      <div class="blog-card blog-placeholder"></div>
+      <div class="blog-card blog-placeholder"></div>
+    </div>
+    <div id="blogMore" style="display:none;text-align:center;margin-top:2rem;">
+      <button class="gallery-load-more" onclick="showMoreBlog()">+ Mehr laden</button>
     </div>
   </section>
+
+  <script>
+    const BLOG_WORKER = 'https://lunke-github-proxy.stefan-cc2.workers.dev';
+    const BLOG_PAGE_SIZE = 4;
+    let allBlogPosts = [];
+    let blogShown = 0;
+
+    async function loadBlog() {
+      try {
+        const res = await fetch(`${BLOG_WORKER}?path=${encodeURIComponent('blog')}`);
+        if (!res.ok) return;
+        const files = await res.json();
+
+        // Nur JSON-Dateien, keine Vorlage, neueste zuerst (Dateiname beginnt mit Datum)
+        const jsonFiles = files
+          .filter(f => f.name.endsWith('.json') && f.name !== 'vorlage.json')
+          .sort((a, b) => b.name.localeCompare(a.name)); // neueste zuerst
+
+        // Alle Posts laden
+        const posts = await Promise.all(jsonFiles.map(async f => {
+          const r = await fetch(f.download_url);
+          const data = await r.json();
+          data._file = f.name;
+          return data;
+        }));
+
+        allBlogPosts = posts;
+        const grid = document.getElementById('blogGrid');
+        grid.innerHTML = '';
+        blogShown = 0;
+
+        if (!allBlogPosts.length) {
+          grid.innerHTML = '<p style="color:rgba(245,240,234,0.4)">Noch keine Posts.</p>';
+          return;
+        }
+
+        showMoreBlog();
+      } catch(e) {}
+    }
+
+    function showMoreBlog() {
+      const grid = document.getElementById('blogGrid');
+      const next = allBlogPosts.slice(blogShown, blogShown + BLOG_PAGE_SIZE);
+
+      next.forEach(post => {
+        const slug = post._file.replace('.json', '');
+        const datum = post.datum ? new Date(post.datum).toLocaleDateString('de-DE', {day:'2-digit', month:'long', year:'numeric'}) : '';
+        const card = document.createElement('a');
+        card.href = `blogpost.html?post=${slug}`;
+        card.className = 'blog-card';
+        card.innerHTML = `
+          ${post.foto ? `<div class="blog-card-img" style="background-image:url('${post.foto}')"></div>` : ''}
+          <div class="blog-card-body">
+            <p class="blog-meta">${datum}</p>
+            <h3>${post.titel || ''}</h3>
+            <p>${(post.text || '').substring(0, 120)}…</p>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      blogShown += next.length;
+      const moreBtn = document.getElementById('blogMore');
+      moreBtn.style.display = blogShown < allBlogPosts.length ? 'block' : 'none';
+    }
+
+    loadBlog();
+  </script>
 
   <!-- ANFAHRT -->
   <div class="anfahrt-wrap" id="anfahrt">

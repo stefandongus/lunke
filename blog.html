@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog – Lunke Trails</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dirt: #2b1f0e; --earth: #4a3520; --sand: #c8a86b;
+      --white: #f5f0ea; --ink: #1a1209; --accent: #e8580a;
+    }
+    body { font-family: 'Barlow', sans-serif; background: var(--ink); color: var(--white); }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 64px;
+      background: rgba(26,18,9,0.97);
+      border-bottom: 1px solid rgba(139,94,42,0.25);
+    }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 38px; width: auto; }
+    .nav-back { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sand); text-decoration: none; }
+    .nav-back:hover { color: var(--accent); }
+
+    .page-header { max-width: 1100px; margin: 0 auto; padding: 5rem 2.5rem 3rem; }
+    .page-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; display: block; }
+    .page-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(2.5rem, 6vw, 4.5rem); text-transform: uppercase; line-height: 1; color: var(--white); }
+
+    .blog-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--earth); max-width: 1100px; margin: 0 auto; }
+    .blog-card { background: var(--dirt); text-decoration: none; display: block; transition: background 0.2s; }
+    .blog-card:hover { background: #3a2a16; }
+    .blog-card-img { width: 100%; height: 220px; background-size: cover; background-position: center; }
+    .blog-card-body { padding: 1.5rem 2rem 2rem; }
+    .blog-meta { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; }
+    .blog-card h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.35rem; text-transform: uppercase; color: var(--white); line-height: 1.15; margin-bottom: 0.75rem; }
+    .blog-card p { font-size: 0.9rem; color: rgba(245,240,234,0.6); line-height: 1.55; }
+    .blog-placeholder { min-height: 300px; background: var(--earth); animation: pulse 1.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+
+    .load-more-wrap { text-align: center; padding: 3rem 0; }
+    .load-more-btn { display: inline-block; padding: 0.85rem 2.5rem; background: transparent; border: 1px solid rgba(245,240,234,0.3); color: var(--white); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+    .load-more-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; }
+      .page-header { padding: 3rem 1.25rem 2rem; }
+      .blog-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <img src="https://raw.githubusercontent.com/stefandongus/lunke/main/logos/lunke_motul/1.png" alt="Lunke Trails" />
+    </a>
+    <a href="index.html" class="nav-back">← Zurück</a>
+  </nav>
+
+  <div class="page-header">
+    <span class="page-label">Aus dem Park</span>
+    <h1 class="page-title">News &amp; Stories</h1>
+  </div>
+
+  <div class="blog-grid" id="blogGrid">
+    <div class="blog-card blog-placeholder"></div>
+    <div class="blog-card blog-placeholder"></div>
+    <div class="blog-card blog-placeholder"></div>
+    <div class="blog-card blog-placeholder"></div>
+  </div>
+
+  <div class="load-more-wrap" id="blogMore" style="display:none">
+    <button class="load-more-btn" onclick="showMoreBlog()">+ Mehr laden</button>
+  </div>
+
+  <script>
+    const WORKER = 'https://lunke-github-proxy.stefan-cc2.workers.dev';
+    const PAGE_SIZE = 6;
+    let allPosts = [], shown = 0;
+
+    async function loadBlog() {
+      try {
+        const res = await fetch(`${WORKER}?path=${encodeURIComponent('blog')}`);
+        const files = await res.json();
+        const jsonFiles = files.filter(f => f.name.endsWith('.json') && f.name !== 'vorlage.json').sort((a,b) => b.name.localeCompare(a.name));
+        allPosts = await Promise.all(jsonFiles.map(async f => {
+          const r = await fetch(f.download_url);
+          const d = await r.json();
+          d._file = f.name;
+          return d;
+        }));
+        document.getElementById('blogGrid').innerHTML = '';
+        shown = 0;
+        showMoreBlog();
+      } catch(e) {}
+    }
+
+    function showMoreBlog() {
+      const grid = document.getElementById('blogGrid');
+      const next = allPosts.slice(shown, shown + PAGE_SIZE);
+      next.forEach(post => {
+        const slug = post._file.replace('.json','');
+        const datum = post.datum ? new Date(post.datum).toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : '';
+        const card = document.createElement('a');
+        card.href = `blogpost.html?post=${slug}`;
+        card.className = 'blog-card';
+        card.innerHTML = `
+          ${post.foto ? `<div class="blog-card-img" style="background-image:url('${post.foto}')"></div>` : ''}
+          <div class="blog-card-body">
+            <p class="blog-meta">${datum}</p>
+            <h3>${post.titel||''}</h3>
+            <p>${(post.text||'').substring(0,140)}…</p>
+          </div>`;
+        grid.appendChild(card);
+      });
+      shown += next.length;
+      document.getElementById('blogMore').style.display = shown < allPosts.length ? 'block' : 'none';
+    }
+
+    loadBlog();
+  </script>
+</body>
+</html>
