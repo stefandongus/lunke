@@ -676,7 +676,7 @@
     }
 
     .gallery-item.wide {
-      grid-column: span 2;
+      grid-column: span 1;
     }
 
     .gallery-load-more {
@@ -1005,6 +1005,7 @@
       <li><a href="#anfahrt">Access</a></li>
       <li><a href="#gallery">Gallery</a></li>
       <li><a href="#blog">Blog</a></li>
+      <li><a href="membership.html">Membership</a></li>
     </ul>
   </nav>
 
@@ -1226,7 +1227,7 @@
       <p>Bevor du das erste Mal mit deinem Bike unseren Park besuchst, müssen wir noch ein paar Formalitäten klären:</p>
       <p>Lies dir vor deinem ersten Besuch bitte unsere <a href="agb.html">→ AGB</a> durch.</p>
       <p>Jetzt brauchen wir noch eine <a href="haftung.html">→ Haftungsverzichterklärung</a> von dir. Druck diese am besten direkt aus und bringe sie ausgefüllt bei deinem ersten Besuch mit!</p>
-      <p>Preisliste Mitglieder / Gäste &nbsp;<a href="#">→ Info</a>.</p>
+      <p>Preisliste Mitglieder / Gäste &nbsp;<a href="membership.html">→ Info</a>.</p>
     </div>
   </div>
 
@@ -1259,8 +1260,9 @@
       <div class="gallery-item gallery-placeholder"></div>
       <div class="gallery-item wide gallery-placeholder"></div>
     </div>
-    <div id="galleryMore" style="display:none;text-align:center;margin-top:2rem;padding-bottom:2rem;">
-      <button class="gallery-load-more" onclick="showMoreGallery()">+ Mehr laden</button>
+    <div id="galleryMore" style="display:none;text-align:center;margin-top:2rem;padding-bottom:2rem;display:flex;gap:1rem;justify-content:center;">
+      <button class="gallery-load-more" id="galleryMoreBtn" onclick="showMoreGallery()" style="display:none">+ Mehr laden</button>
+      <button class="gallery-load-more" id="galleryLessBtn" onclick="showLessGallery()" style="display:none">− Weniger</button>
     </div>
     <p style="padding:0 2.5rem 2rem;font-size:0.85rem;color:rgba(245,240,234,0.4);font-family:'Barlow Condensed',sans-serif;letter-spacing:0.1em;text-transform:uppercase;">Mehr auf <a href="https://www.instagram.com/lunke_trails_powered_by_motul/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;">@lunke_trails_powered_by_motul</a></p>
   </div>
@@ -1281,41 +1283,55 @@
           .filter(f => /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name))
           .reverse(); // neueste zuerst
 
-        const grid = document.getElementById('galleryGrid');
         grid.innerHTML = '';
         galleryShown = 0;
 
         if (!allGalleryImages.length) return;
 
-        showMoreGallery();
+        const first = allGalleryImages.slice(0, GALLERY_PAGE_SIZE);
+        renderGalleryItems(first);
+        galleryShown = first.length;
+        updateGalleryButtons();
       } catch(e) {
         document.getElementById('galleryGrid').innerHTML = '';
       }
     }
 
-    function showMoreGallery() {
-      const grid = document.getElementById('galleryGrid');
-      const next = allGalleryImages.slice(galleryShown, galleryShown + GALLERY_PAGE_SIZE);
+    function updateGalleryButtons() {
+      document.getElementById('galleryMoreBtn').style.display = galleryShown < allGalleryImages.length ? 'inline-block' : 'none';
+      document.getElementById('galleryLessBtn').style.display = galleryShown > GALLERY_PAGE_SIZE ? 'inline-block' : 'none';
+      document.getElementById('galleryMore').style.display = 'flex';
+    }
 
-      next.forEach((file, i) => {
+    function renderGalleryItems(images) {
+      const grid = document.getElementById('galleryGrid');
+      images.forEach((file, i) => {
         const globalIndex = galleryShown + i;
         const div = document.createElement('div');
         let cls = 'gallery-item';
         if (globalIndex === 0) cls += ' tall';
-        else if (globalIndex % 6 === 5) cls += ' wide';
         div.className = cls;
         div.style.backgroundImage = `url('${file.download_url}')`;
         grid.appendChild(div);
       });
+    }
 
+    function showMoreGallery() {
+      const next = allGalleryImages.slice(galleryShown, galleryShown + GALLERY_PAGE_SIZE);
+      renderGalleryItems(next);
       galleryShown += next.length;
+      updateGalleryButtons();
+    }
 
-      const moreBtn = document.getElementById('galleryMore');
-      if (galleryShown < allGalleryImages.length) {
-        moreBtn.style.display = 'block';
-      } else {
-        moreBtn.style.display = 'none';
-      }
+    function showLessGallery() {
+      const grid = document.getElementById('galleryGrid');
+      grid.innerHTML = '';
+      galleryShown = 0;
+      const first = allGalleryImages.slice(0, GALLERY_PAGE_SIZE);
+      renderGalleryItems(first);
+      galleryShown = first.length;
+      updateGalleryButtons();
+      document.getElementById('gallery').scrollIntoView({behavior:'smooth'});
     }
 
     loadSiteGallery();

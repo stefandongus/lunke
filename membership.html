@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Membership – Lunke Trails</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dirt:   #2b1f0e;
+      --earth:  #4a3520;
+      --trail:  #8b5e2a;
+      --sand:   #c8a86b;
+      --white:  #f5f0ea;
+      --ink:    #1a1209;
+      --accent: #e8580a;
+    }
+
+    body { font-family: 'Barlow', sans-serif; background: var(--ink); color: var(--white); font-size: 17px; line-height: 1.6; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 64px;
+      background: rgba(26,18,9,0.97);
+      border-bottom: 1px solid rgba(139,94,42,0.25);
+    }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 38px; width: auto; }
+    .nav-back { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sand); text-decoration: none; transition: color 0.2s; }
+    .nav-back:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      position: relative; width: 100%; height: 60vh; overflow: hidden;
+    }
+    .hero img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(26,18,9,0.1) 0%, rgba(26,18,9,0.6) 60%, rgba(26,18,9,1) 100%);
+    }
+    .hero-content {
+      position: absolute; bottom: 3rem; left: 2.5rem;
+    }
+    .hero-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; display: block; }
+    .hero-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(3rem, 7vw, 6rem); text-transform: uppercase; line-height: 0.95; color: var(--white); }
+
+    /* INTRO */
+    .intro-section {
+      max-width: 1100px; margin: 0 auto; padding: 5rem 2.5rem 0;
+    }
+    .intro-lead {
+      font-size: 1.15rem; line-height: 1.75; color: rgba(245,240,234,0.8);
+      max-width: 680px; margin-bottom: 4rem;
+    }
+
+    /* PREISE GRID */
+    .preise-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+      background: rgba(139,94,42,0.2); margin-bottom: 5rem;
+    }
+
+    .preis-card {
+      background: var(--dirt); padding: 2.5rem;
+    }
+
+    .preis-card-title {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+      font-size: 1.4rem; text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--sand); margin-bottom: 1.5rem;
+      padding-bottom: 1rem; border-bottom: 1px solid rgba(139,94,42,0.3);
+    }
+
+    .preis-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 0.65rem 0; border-bottom: 1px solid rgba(139,94,42,0.15);
+    }
+    .preis-row:last-child { border-bottom: none; }
+
+    .preis-label { font-size: 0.95rem; color: rgba(245,240,234,0.75); }
+    .preis-value {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 1.2rem; color: var(--white);
+    }
+
+    /* JOIN SECTION */
+    .join-section {
+      background: var(--earth); padding: 5rem 2.5rem;
+    }
+    .join-inner { max-width: 780px; margin: 0 auto; }
+
+    .join-title {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+      font-size: clamp(2.5rem, 5vw, 4rem); text-transform: uppercase;
+      color: var(--white); margin-bottom: 2rem; line-height: 1;
+    }
+
+    .join-text { color: rgba(245,240,234,0.75); font-size: 1rem; line-height: 1.8; margin-bottom: 1rem; }
+
+    .join-beitraege {
+      background: rgba(26,18,9,0.4); border-left: 3px solid var(--accent);
+      padding: 1.25rem 1.5rem; margin: 1.5rem 0;
+    }
+
+    .join-beitraege p {
+      color: rgba(245,240,234,0.8); font-size: 0.95rem; line-height: 1.7;
+    }
+
+    /* BUTTONS */
+    .btn-primary {
+      display: inline-block; margin-top: 2rem;
+      padding: 1rem 2.5rem;
+      background: var(--accent); color: var(--white);
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 1.05rem; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #c44608; }
+
+    .btn-outline {
+      display: inline-block; margin-top: 1rem;
+      padding: 0.85rem 2.5rem;
+      background: transparent; color: var(--white);
+      border: 1px solid rgba(245,240,234,0.35);
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 1.05rem; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* SELBSTVERWALTUNG */
+    .selbst-section {
+      max-width: 780px; margin: 0 auto; padding: 5rem 2.5rem 6rem;
+      border-top: 1px solid rgba(139,94,42,0.2);
+    }
+
+    .selbst-title {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+      font-size: clamp(1.8rem, 3vw, 2.5rem); text-transform: uppercase;
+      color: var(--white); margin-bottom: 0.75rem; line-height: 1;
+    }
+
+    .selbst-text { color: rgba(245,240,234,0.6); font-size: 0.95rem; margin-bottom: 1.5rem; }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; }
+      .hero-content { left: 1.25rem; bottom: 2rem; }
+      .intro-section { padding: 3rem 1.25rem 0; }
+      .preise-grid { grid-template-columns: 1fr; }
+      .join-section { padding: 4rem 1.25rem; }
+      .selbst-section { padding: 3rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <img src="https://raw.githubusercontent.com/stefandongus/lunke/main/logos/lunke_motul/1.png" alt="Lunke Trails" />
+    </a>
+    <a href="index.html" class="nav-back">← Zurück</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <img src="image/weitere/Bildschirmfoto+2024-05-20+um+22.48.35.png" alt="Lunke Trails Membership" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-label">Tra1ls e.V.</span>
+      <h1 class="hero-title">Membership</h1>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro-section">
+    <p class="intro-lead">Vereinsmitglieder haben freien Zugang zum Park und können auch während der Members-Only-Zeiten fahren. Alle anderen sind herzlich zu unseren offiziellen Öffnungszeiten eingeladen.</p>
+
+    <!-- PREISE -->
+    <div class="preise-grid">
+      <div class="preis-card">
+        <p class="preis-card-title">Mitgliedsbeiträge</p>
+        <div class="preis-row">
+          <span class="preis-label">Bis 16 Jahre</span>
+          <span class="preis-value">60,- € / Jahr</span>
+        </div>
+        <div class="preis-row">
+          <span class="preis-label">Über 16 Jahre</span>
+          <span class="preis-value">120,- € / Jahr</span>
+        </div>
+      </div>
+      <div class="preis-card">
+        <p class="preis-card-title">Tageskarte Nicht-Mitglieder</p>
+        <div class="preis-row">
+          <span class="preis-label">Bis 16 Jahre</span>
+          <span class="preis-value">5,- €</span>
+        </div>
+        <div class="preis-row">
+          <span class="preis-label">Über 16 Jahre</span>
+          <span class="preis-value">8,- €</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOIN -->
+  <div class="join-section">
+    <div class="join-inner">
+      <h2 class="join-title">Join the Club</h2>
+      <p class="join-text">Hallo! Über den Button unten kannst du deine Mitgliedschaft im Tra1ls e.V. beantragen.</p>
+
+      <div class="join-beitraege">
+        <p>Mitglieder bis 16 Jahre — jährlich 60,- € / halbjährlich 30,- €</p>
+        <p>Mitglieder über 16 Jahre — jährlich 120,- € / halbjährlich 60,- €</p>
+      </div>
+
+      <p class="join-text">Die Mitgliederbeiträge werden für dich unkompliziert per SEPA-Mandat eingezogen. Die Anmeldegebühr beträgt 10,- €, diese wird mit dem ersten Beitrag abgebucht.</p>
+      <p class="join-text">Nachdem von dir alles Erforderliche ausgefüllt wurde, erhältst du umgehend alle Informationen per E-Mail.</p>
+      <p class="join-text">Vielen Dank.<br><strong style="color:var(--white)">Dein Tra1ls e.V. Vorstand</strong></p>
+
+      <a href="https://tra1ls.webling.eu/forms/memberform/1bd1be871ddf5d2ba521" target="_blank" rel="noopener" class="btn-primary">→ Zur Anmeldung</a>
+    </div>
+  </div>
+
+  <!-- SELBSTVERWALTUNG -->
+  <div class="selbst-section">
+    <h2 class="selbst-title">Verwalte dich doch selber!</h2>
+    <p class="selbst-text">Dafür nutzen wir den Anbieter Webling.</p>
+    <a href="https://tra1ls.webling.eu/portal#/" target="_blank" rel="noopener" class="btn-outline">→ Mitgliederverwaltung</a>
+  </div>
+
+</body>
+</html>
