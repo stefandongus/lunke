@@ -646,6 +646,14 @@
 
     .zeiten-list a:hover { text-decoration: underline; }
 
+    .zeiten-host {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--sand);
+      margin-top: 0.2rem;
+    }
+
     /* ── GALLERY ── */
     .gallery-fullwidth {
       width: 100%;
@@ -1204,7 +1212,10 @@
         ['oeffnungszeiten_1','oeffnungszeiten_2','oeffnungszeiten_3'].forEach((key, i) => {
           const el = document.getElementById(`parkZeiten${i+1}`);
           if (data[key] && data[key].trim()) {
-            el.textContent = data[key].trim();
+            const parts = data[key].split('|');
+            const termin = parts[0].trim();
+            const host = parts[1] ? parts[1].trim() : '';
+            el.innerHTML = termin + (host ? `<span class="zeiten-host">${host}</span>` : '');
             el.style.display = 'list-item';
             anyZeiten = true;
           }

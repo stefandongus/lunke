@@ -505,6 +505,7 @@
               <select id="z1_bis_m"><option value="">Min</option></select>
               <div></div>
             </div>
+            <input type="text" id="z1_host" placeholder="Host (z.B. Lunke Crew)" style="margin-top:0.4rem" />
             <p class="termin-preview" id="z1_preview"></p>
             <button class="termin-clear" onclick="clearTermin(1)">✕ Termin leeren</button>
           </div>
@@ -522,6 +523,7 @@
               <select id="z2_bis_m"><option value="">Min</option></select>
               <div></div>
             </div>
+            <input type="text" id="z2_host" placeholder="Host (z.B. Lunke Crew)" style="margin-top:0.4rem" />
             <p class="termin-preview" id="z2_preview"></p>
             <button class="termin-clear" onclick="clearTermin(2)">✕ Termin leeren</button>
           </div>
@@ -539,6 +541,7 @@
               <select id="z3_bis_m"><option value="">Min</option></select>
               <div></div>
             </div>
+            <input type="text" id="z3_host" placeholder="Host (z.B. Lunke Crew)" style="margin-top:0.4rem" />
             <p class="termin-preview" id="z3_preview"></p>
             <button class="termin-clear" onclick="clearTermin(3)">✕ Termin leeren</button>
           </div>
@@ -660,23 +663,25 @@
       const vonM  = document.getElementById(`z${n}_von_m`).value;
       const bisH  = document.getElementById(`z${n}_bis_h`).value;
       const bisM  = document.getElementById(`z${n}_bis_m`).value;
+      const host  = document.getElementById(`z${n}_host`).value.trim();
 
       if (!tag || !vonH || !vonM) return '';
 
       let text = `${tag}, ${vonH}:${vonM} Uhr`;
       if (bisH === 'open-end') text += ' – Open End';
       else if (bisH) text += ` – ${bisH}:${bisM || '00'} Uhr`;
+      if (host) text += ` | ${host}`;
       return text;
     }
 
     function shiftTermine() {
-      // Werte von 2 und 3 auslesen
       const getVals = n => ({
         tag:   document.getElementById(`z${n}_tag`).value,
         von_h: document.getElementById(`z${n}_von_h`).value,
         von_m: document.getElementById(`z${n}_von_m`).value,
         bis_h: document.getElementById(`z${n}_bis_h`).value,
         bis_m: document.getElementById(`z${n}_bis_m`).value,
+        host:  document.getElementById(`z${n}_host`).value,
       });
 
       const setVals = (n, v) => {
@@ -685,7 +690,7 @@
         document.getElementById(`z${n}_von_m`).value = v.von_m;
         document.getElementById(`z${n}_bis_h`).value = v.bis_h;
         document.getElementById(`z${n}_bis_m`).value = v.bis_m;
-        // Open End: Minuten ausblenden
+        document.getElementById(`z${n}_host`).value  = v.host || '';
         document.getElementById(`z${n}_bis_m`).style.visibility =
           v.bis_h === 'open-end' ? 'hidden' : 'visible';
         updatePreview(n);
@@ -709,17 +714,18 @@
         document.getElementById(id).selectedIndex = 0;
       });
       document.getElementById(`z${n}_bis_m`).style.visibility = 'visible';
+      document.getElementById(`z${n}_host`).value = '';
       document.getElementById(`z${n}_preview`).textContent = '';
     }
 
     // Gespeicherten Termin-String zurück in Dropdowns laden
     function parseTerminIntoDropdowns(n, str) {
       if (!str) return;
-      // Format: "Samstag, 12:00 Uhr – 20:00 Uhr" oder "Samstag, 12:00 Uhr – Open End"
       const tagMatch = str.match(/^(\w+),/);
       const vonMatch = str.match(/,\s*(\d+):(\d+)/);
       const bisMatch = str.match(/–\s*(\d+):(\d+)/);
       const openEnd  = str.includes('Open End');
+      const hostMatch = str.match(/\|\s*(.+)$/);
 
       if (tagMatch) document.getElementById(`z${n}_tag`).value = tagMatch[1];
       if (vonMatch) {
@@ -733,6 +739,7 @@
         document.getElementById(`z${n}_bis_h`).value = String(parseInt(bisMatch[1]));
         document.getElementById(`z${n}_bis_m`).value = bisMatch[2];
       }
+      if (hostMatch) document.getElementById(`z${n}_host`).value = hostMatch[1].trim();
       updatePreview(n);
     }
 
