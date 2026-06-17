@@ -735,9 +735,16 @@
 
     .blog-card:hover { background: #3a2a16; }
 
-    .blog-card-img {
+    .blog-card-img-wrap {
       width: 100%;
-      height: 200px;
+      padding-top: 75%; /* 4:3 = 75% */
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blog-card-img {
+      position: absolute;
+      inset: 0;
       background-size: cover;
       background-position: center;
     }
@@ -1385,7 +1392,7 @@
         card.href = `blogpost.html?post=${slug}`;
         card.className = 'blog-card';
         card.innerHTML = `
-          ${post.foto ? `<div class="blog-card-img" style="background-image:url('${post.foto}')"></div>` : ''}
+          ${post.foto ? `<div class="blog-card-img-wrap"><div class="blog-card-img" style="background-image:url('${post.foto}')"></div></div>` : ''}
           <div class="blog-card-body">
             <p class="blog-meta">${datum}</p>
             <h3>${post.titel || ''}</h3>
