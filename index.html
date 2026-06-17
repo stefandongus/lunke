@@ -1391,7 +1391,12 @@
           return data;
         }));
 
-        allBlogPosts = posts;
+        // Nach Datum sortieren — neueste zuerst
+        allBlogPosts = posts.sort((a, b) => {
+          const da = a.datum ? new Date(a.datum) : new Date(0);
+          const db = b.datum ? new Date(b.datum) : new Date(0);
+          return db - da;
+        });
         const grid = document.getElementById('blogGrid');
         grid.innerHTML = '';
         blogShown = 0;

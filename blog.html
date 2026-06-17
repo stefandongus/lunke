@@ -89,12 +89,16 @@
         const res = await fetch(`${WORKER}?path=${encodeURIComponent('blog')}`);
         const files = await res.json();
         const jsonFiles = files.filter(f => f.name.endsWith('.json') && f.name !== 'vorlage.json').sort((a,b) => b.name.localeCompare(a.name));
-        allPosts = await Promise.all(jsonFiles.map(async f => {
+        allPosts = (await Promise.all(jsonFiles.map(async f => {
           const r = await fetch(f.download_url);
           const d = await r.json();
           d._file = f.name;
           return d;
-        }));
+        }))).sort((a, b) => {
+          const da = a.datum ? new Date(a.datum) : new Date(0);
+          const db = b.datum ? new Date(b.datum) : new Date(0);
+          return db - da;
+        });
         document.getElementById('blogGrid').innerHTML = '';
         shown = 0;
         if (!allPosts.length) {
