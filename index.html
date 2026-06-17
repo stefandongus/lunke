@@ -650,7 +650,7 @@
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: 220px 220px;
+      grid-auto-rows: 220px;
       gap: 4px;
       margin-top: 2rem;
     }
@@ -1233,7 +1233,7 @@
 
   <script>
     const GALLERY_WORKER = 'https://lunke-github-proxy.stefan-cc2.workers.dev';
-    const GALLERY_PAGE_SIZE = 5;
+    const GALLERY_PAGE_SIZE = 6;
     let allGalleryImages = [];
     let galleryShown = 0;
 
@@ -1243,19 +1243,16 @@
         if (!res.ok) return;
         const files = await res.json();
 
-        // Nur Bilder, neueste zuerst (nach GitHub-Commit-SHA sortiert geht nicht direkt,
-        // aber GitHub API liefert alphabetisch — wir kehren die Reihenfolge um als Näherung)
         allGalleryImages = files
           .filter(f => /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name))
-          .reverse(); // neueste zuletzt hochgeladen = zuletzt in der Liste → reverse
+          .reverse(); // neueste zuerst
 
-        if (!allGalleryImages.length) {
-          document.getElementById('galleryGrid').innerHTML = '';
-          return;
-        }
-
+        const grid = document.getElementById('galleryGrid');
+        grid.innerHTML = '';
         galleryShown = 0;
-        document.getElementById('galleryGrid').innerHTML = '';
+
+        if (!allGalleryImages.length) return;
+
         showMoreGallery();
       } catch(e) {
         document.getElementById('galleryGrid').innerHTML = '';
@@ -1271,7 +1268,7 @@
         const div = document.createElement('div');
         let cls = 'gallery-item';
         if (globalIndex === 0) cls += ' tall';
-        else if (globalIndex % 5 === 4) cls += ' wide';
+        else if (globalIndex % 6 === 5) cls += ' wide';
         div.className = cls;
         div.style.backgroundImage = `url('${file.download_url}')`;
         grid.appendChild(div);
@@ -1280,7 +1277,11 @@
       galleryShown += next.length;
 
       const moreBtn = document.getElementById('galleryMore');
-      moreBtn.style.display = galleryShown < allGalleryImages.length ? 'block' : 'none';
+      if (galleryShown < allGalleryImages.length) {
+        moreBtn.style.display = 'block';
+      } else {
+        moreBtn.style.display = 'none';
+      }
     }
 
     loadSiteGallery();

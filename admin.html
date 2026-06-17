@@ -970,7 +970,7 @@
       try {
         const res = await ghFetch(GH_PATH);
         const files = await res.json();
-        const images = files.filter(f => /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name));
+        const images = files.filter(f => /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name)).reverse();
 
         if (!images.length) {
           grid.innerHTML = '<p style="color:rgba(245,240,234,0.3);font-size:0.85rem">Noch keine Fotos.</p>';
