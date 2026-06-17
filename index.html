@@ -1062,29 +1062,37 @@
     fetch(CSV_URL)
       .then(r => r.text())
       .then(csv => {
-        // Robuster CSV-Parser — behandelt Kommas in Anführungszeichen korrekt
-        function parseCSVRow(row) {
-          const result = [];
+        // Robuster CSV-Parser — behandelt Kommas und Anführungszeichen korrekt
+        function parseCSV(text) {
+          const rows = [];
+          let row = [];
           let current = '';
           let inQuotes = false;
-          for (let i = 0; i < row.length; i++) {
-            const ch = row[i];
-            if (ch === '"') {
+          for (let i = 0; i < text.length; i++) {
+            const ch = text[i];
+            const next = text[i+1];
+            if (ch === '"' && inQuotes && next === '"') {
+              current += '"'; i++; // escaped quote
+            } else if (ch === '"') {
               inQuotes = !inQuotes;
             } else if (ch === ',' && !inQuotes) {
-              result.push(current.trim());
-              current = '';
+              row.push(current.trim()); current = '';
+            } else if ((ch === '\n' || ch === '\r') && !inQuotes) {
+              if (ch === '\r' && next === '\n') i++;
+              row.push(current.trim()); current = '';
+              if (row.some(v => v)) rows.push(row);
+              row = [];
             } else {
               current += ch;
             }
           }
-          result.push(current.trim());
-          return result;
+          if (current || row.length) { row.push(current.trim()); rows.push(row); }
+          return rows;
         }
 
-        const rows = csv.trim().split('\n');
-        const headers = parseCSVRow(rows[0]);
-        const values  = parseCSVRow(rows[1]);
+        const parsed = parseCSV(csv);
+        const headers = parsed[0];
+        const values  = parsed[1] || [];
         const data = {};
         headers.forEach((h, i) => data[h] = values[i] || '');
 
