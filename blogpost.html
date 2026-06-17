@@ -28,7 +28,10 @@
     .nav-back:hover { color: var(--accent); }
 
     .post-hero {
-      width: 100%; height: 55vh; overflow: hidden;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      max-height: 60vh;
+      overflow: hidden;
       background: var(--earth);
     }
     .post-hero img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
@@ -101,7 +104,10 @@
       try {
         const res = await fetch(`${WORKER}?path=${encodeURIComponent('blog/' + slug + '.json')}`);
         const file = await res.json();
-        const post = JSON.parse(atob(file.content.replace(/\n/g,'')));
+        const raw = file.content.replace(/\n/g,'');
+        const bytes = Uint8Array.from(atob(raw), c => c.charCodeAt(0));
+        const decoded = new TextDecoder('utf-8').decode(bytes);
+        const post = JSON.parse(decoded);
 
         document.title = `${post.titel} – Lunke Trails`;
 
