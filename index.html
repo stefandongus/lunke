@@ -669,6 +669,26 @@
       grid-column: span 2;
     }
 
+    .gallery-load-more {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      background: transparent;
+      border: 1px solid rgba(245, 240, 234, 0.3);
+      color: var(--white);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .gallery-load-more:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     .gallery-placeholder {
       background-color: var(--earth);
       animation: pulse 1.5s ease-in-out infinite;
@@ -1199,42 +1219,68 @@
     <p class="section-label">Aus dem Park</p>
     <h2 class="section-title">Gallery</h2>
     <div class="gallery-grid" id="galleryGrid">
-      <!-- wird dynamisch geladen -->
       <div class="gallery-item tall gallery-placeholder"></div>
       <div class="gallery-item gallery-placeholder"></div>
       <div class="gallery-item gallery-placeholder"></div>
       <div class="gallery-item gallery-placeholder"></div>
       <div class="gallery-item wide gallery-placeholder"></div>
     </div>
+    <div id="galleryMore" style="display:none;text-align:center;margin-top:2rem;">
+      <button class="gallery-load-more" onclick="showMoreGallery()">+ Mehr laden</button>
+    </div>
     <p style="margin-top:1.5rem;font-size:0.85rem;color:rgba(245,240,234,0.4);font-family:'Barlow Condensed',sans-serif;letter-spacing:0.1em;text-transform:uppercase;">Mehr auf <a href="https://www.instagram.com/lunke_trails_powered_by_motul/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;">@lunke_trails_powered_by_motul</a></p>
   </section>
 
   <script>
-    // Gallery dynamisch aus GitHub laden
     const GALLERY_WORKER = 'https://lunke-github-proxy.stefan-cc2.workers.dev';
+    const GALLERY_PAGE_SIZE = 5;
+    let allGalleryImages = [];
+    let galleryShown = 0;
 
     async function loadSiteGallery() {
       try {
         const res = await fetch(`${GALLERY_WORKER}?path=${encodeURIComponent('image/gallery')}`);
         if (!res.ok) return;
         const files = await res.json();
-        const images = files.filter(f => /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name));
-        if (!images.length) return;
 
-        const grid = document.getElementById('galleryGrid');
-        grid.innerHTML = '';
+        // Nur Bilder, neueste zuerst (nach GitHub-Commit-SHA sortiert geht nicht direkt,
+        // aber GitHub API liefert alphabetisch — wir kehren die Reihenfolge um als Näherung)
+        allGalleryImages = files
+          .filter(f => /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name))
+          .reverse(); // neueste zuletzt hochgeladen = zuletzt in der Liste → reverse
 
-        // Erstes Bild tall, letztes wide, Rest normal
-        images.forEach((file, i) => {
-          const div = document.createElement('div');
-          let cls = 'gallery-item';
-          if (i === 0) cls += ' tall';
-          if (i === images.length - 1 && images.length > 4) cls += ' wide';
-          div.className = cls;
-          div.style.backgroundImage = `url('${file.download_url}')`;
-          grid.appendChild(div);
-        });
-      } catch(e) {}
+        if (!allGalleryImages.length) {
+          document.getElementById('galleryGrid').innerHTML = '';
+          return;
+        }
+
+        galleryShown = 0;
+        document.getElementById('galleryGrid').innerHTML = '';
+        showMoreGallery();
+      } catch(e) {
+        document.getElementById('galleryGrid').innerHTML = '';
+      }
+    }
+
+    function showMoreGallery() {
+      const grid = document.getElementById('galleryGrid');
+      const next = allGalleryImages.slice(galleryShown, galleryShown + GALLERY_PAGE_SIZE);
+
+      next.forEach((file, i) => {
+        const globalIndex = galleryShown + i;
+        const div = document.createElement('div');
+        let cls = 'gallery-item';
+        if (globalIndex === 0) cls += ' tall';
+        else if (globalIndex % 5 === 4) cls += ' wide';
+        div.className = cls;
+        div.style.backgroundImage = `url('${file.download_url}')`;
+        grid.appendChild(div);
+      });
+
+      galleryShown += next.length;
+
+      const moreBtn = document.getElementById('galleryMore');
+      moreBtn.style.display = galleryShown < allGalleryImages.length ? 'block' : 'none';
     }
 
     loadSiteGallery();
