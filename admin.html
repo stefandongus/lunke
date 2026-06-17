@@ -325,6 +325,124 @@
       white-space: nowrap;
     }
 
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: rgba(245,240,234,0.25);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(245,240,234,0.1);
+    }
+
+    .upload-zone {
+      border: 2px dashed rgba(200,168,107,0.3);
+      border-radius: 10px;
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .upload-zone:hover { border-color: var(--accent); }
+
+    .upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+
+    .upload-hint {
+      font-size: 0.9rem;
+      color: rgba(245,240,234,0.5);
+      line-height: 1.5;
+    }
+
+    .upload-hint span { font-size: 0.75rem; }
+
+    .upload-queue {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .upload-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--earth);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+    }
+
+    .upload-item img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .upload-item-name {
+      flex: 1;
+      color: rgba(245,240,234,0.8);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .upload-item-status { font-size: 0.8rem; color: var(--sand); }
+    .upload-item-status.done { color: #4caf50; }
+    .upload-item-status.error { color: #ef5350; }
+
+    .gallery-admin-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .gallery-admin-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--earth);
+    }
+
+    .gallery-admin-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-admin-delete {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .gallery-admin-delete:hover { background: var(--red); }
+
     #toast.show { transform: translateX(-50%) translateY(0); }
     #toast.error { background: var(--red); }
   </style>
@@ -438,6 +556,33 @@
 
       <!-- SPEICHERN -->
       <button class="save-btn" id="saveBtn" onclick="saveData()">Speichern & Live schalten</button>
+
+      <!-- TRENNLINIE -->
+      <div class="section-divider">
+        <span>Gallery</span>
+      </div>
+
+      <!-- FOTO UPLOAD -->
+      <div class="card">
+        <p class="card-title">Fotos hochladen</p>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+          <div class="upload-icon">📷</div>
+          <p class="upload-hint">Tippen zum Auswählen<br><span>JPG, PNG, WEBP · max. 5 MB pro Foto</span></p>
+          <input type="file" id="fileInput" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)" />
+        </div>
+        <div id="uploadQueue" class="upload-queue"></div>
+        <button class="save-btn" id="uploadBtn" onclick="uploadAll()" style="display:none;margin-top:0.75rem">
+          ↑ Fotos in Gallery hochladen
+        </button>
+      </div>
+
+      <!-- GALLERY ÜBERSICHT -->
+      <div class="card">
+        <p class="card-title">Hochgeladene Fotos</p>
+        <div id="galleryGrid" class="gallery-admin-grid">
+          <p style="color:rgba(245,240,234,0.3);font-size:0.85rem">Wird geladen...</p>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -713,6 +858,192 @@
         btn.disabled = false;
         btn.textContent = 'Speichern & Live schalten';
       });
+    }
+
+    // ── GITHUB CONFIG ──
+    const GH_TOKEN = 'DEIN_TOKEN_HIER';
+    const GH_OWNER = 'stefandongus';
+    const GH_REPO  = 'lunke';
+    const GH_PATH  = 'image/gallery';
+    const GH_API   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}`;
+
+    let uploadFiles = [];
+
+    // ── DATEI-AUSWAHL ──
+    function handleFiles(files) {
+      uploadFiles = Array.from(files);
+      const queue = document.getElementById('uploadQueue');
+      queue.innerHTML = '';
+
+      uploadFiles.forEach((file, i) => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const item = document.createElement('div');
+          item.className = 'upload-item';
+          item.id = `upload-item-${i}`;
+          item.innerHTML = `
+            <img src="${e.target.result}" />
+            <span class="upload-item-name">${file.name}</span>
+            <span class="upload-item-status" id="status-${i}">Bereit</span>
+          `;
+          queue.appendChild(item);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('uploadBtn').style.display = uploadFiles.length ? 'block' : 'none';
+    }
+
+    // ── UPLOAD ──
+    async function uploadAll() {
+      const btn = document.getElementById('uploadBtn');
+      btn.disabled = true;
+      btn.textContent = 'Wird hochgeladen...';
+
+      for (let i = 0; i < uploadFiles.length; i++) {
+        const file = uploadFiles[i];
+        const statusEl = document.getElementById(`status-${i}`);
+        statusEl.textContent = '↑ Lädt...';
+
+        try {
+          const base64 = await fileToBase64(file);
+          const filename = sanitizeFilename(file.name);
+          const url = `${GH_API}/${filename}`;
+
+          // Prüfen ob Datei schon existiert (SHA nötig für Update)
+          let sha = null;
+          try {
+            const check = await fetch(url, {
+              headers: { Authorization: `token ${GH_TOKEN}`, Accept: 'application/vnd.github+json' }
+            });
+            if (check.ok) {
+              const existing = await check.json();
+              sha = existing.sha;
+            }
+          } catch(e) {}
+
+          const body = {
+            message: `Gallery: ${filename} hochgeladen via Admin`,
+            content: base64,
+          };
+          if (sha) body.sha = sha;
+
+          const res = await fetch(url, {
+            method: 'PUT',
+            headers: {
+              Authorization: `token ${GH_TOKEN}`,
+              Accept: 'application/vnd.github+json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+          });
+
+          if (res.ok) {
+            statusEl.textContent = '✓ Hochgeladen';
+            statusEl.className = 'upload-item-status done';
+          } else {
+            throw new Error(res.status);
+          }
+        } catch(err) {
+          statusEl.textContent = '✗ Fehler';
+          statusEl.className = 'upload-item-status error';
+        }
+      }
+
+      btn.disabled = false;
+      btn.textContent = '↑ Fotos in Gallery hochladen';
+      uploadFiles = [];
+      setTimeout(() => loadGallery(), 1500);
+      showToast('✓ Fotos hochgeladen!', false);
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function sanitizeFilename(name) {
+      return name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    }
+
+    // ── GALLERY LADEN ──
+    async function loadGallery() {
+      const grid = document.getElementById('galleryGrid');
+      grid.innerHTML = '<p style="color:rgba(245,240,234,0.3);font-size:0.85rem">Wird geladen...</p>';
+
+      try {
+        const res = await fetch(GH_API, {
+          headers: { Authorization: `token ${GH_TOKEN}`, Accept: 'application/vnd.github+json' }
+        });
+        const files = await res.json();
+
+        const images = files.filter(f => /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name));
+
+        if (!images.length) {
+          grid.innerHTML = '<p style="color:rgba(245,240,234,0.3);font-size:0.85rem">Noch keine Fotos.</p>';
+          return;
+        }
+
+        grid.innerHTML = '';
+        images.forEach(file => {
+          const item = document.createElement('div');
+          item.className = 'gallery-admin-item';
+          item.innerHTML = `
+            <img src="${file.download_url}" loading="lazy" />
+            <button class="gallery-admin-delete" onclick="deletePhoto('${file.name}', '${file.sha}')" title="Löschen">✕</button>
+          `;
+          grid.appendChild(item);
+        });
+      } catch(err) {
+        grid.innerHTML = '<p style="color:#ef5350;font-size:0.85rem">Fehler beim Laden.</p>';
+      }
+    }
+
+    // ── FOTO LÖSCHEN ──
+    async function deletePhoto(filename, sha) {
+      if (!confirm(`"${filename}" wirklich löschen?`)) return;
+
+      try {
+        const res = await fetch(`${GH_API}/${filename}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `token ${GH_TOKEN}`,
+            Accept: 'application/vnd.github+json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: `Gallery: ${filename} gelöscht via Admin`,
+            sha: sha,
+          }),
+        });
+
+        if (res.ok) {
+          showToast('✓ Foto gelöscht', false);
+          setTimeout(() => loadGallery(), 800);
+        } else {
+          throw new Error();
+        }
+      } catch(err) {
+        showToast('Fehler beim Löschen', true);
+      }
+    }
+
+    // Gallery beim Login laden
+    const _origDoLogin = doLogin;
+    function doLogin() {
+      const pw = document.getElementById('pwInput').value;
+      if (pw === PASSWORD) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('appScreen').style.display = 'block';
+        loadCurrentData();
+        loadGallery();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
     }
 
     // ── TOAST ──
