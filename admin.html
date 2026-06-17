@@ -861,13 +861,18 @@
     }
 
     // ── GITHUB CONFIG ──
-    const GH_TOKEN = 'DEIN_TOKEN_HIER';
-    const GH_OWNER = 'stefandongus';
-    const GH_REPO  = 'lunke';
-    const GH_PATH  = 'image/gallery';
-    const GH_API   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}`;
+    const WORKER_URL = 'https://lunke-github-proxy.stefan-cc2.workers.dev';
+    const GH_PATH    = 'image/gallery';
 
-    let uploadFiles = [];
+    function ghFetch(path, method = 'GET', body = null) {
+      const url = `${WORKER_URL}?path=${encodeURIComponent(path)}`;
+      const opts = {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+      };
+      if (body) opts.body = JSON.stringify(body);
+      return fetch(url, opts);
+    }
 
     // ── DATEI-AUSWAHL ──
     function handleFiles(files) {
@@ -908,35 +913,22 @@
         try {
           const base64 = await fileToBase64(file);
           const filename = sanitizeFilename(file.name);
-          const url = `${GH_API}/${filename}`;
+          const path = `${GH_PATH}/${filename}`;
 
-          // Prüfen ob Datei schon existiert (SHA nötig für Update)
+          // SHA prüfen falls Datei schon existiert
           let sha = null;
           try {
-            const check = await fetch(url, {
-              headers: { Authorization: `token ${GH_TOKEN}`, Accept: 'application/vnd.github+json' }
-            });
+            const check = await ghFetch(path);
             if (check.ok) {
               const existing = await check.json();
               sha = existing.sha;
             }
           } catch(e) {}
 
-          const body = {
-            message: `Gallery: ${filename} hochgeladen via Admin`,
-            content: base64,
-          };
+          const body = { message: `Gallery: ${filename} hochgeladen via Admin`, content: base64 };
           if (sha) body.sha = sha;
 
-          const res = await fetch(url, {
-            method: 'PUT',
-            headers: {
-              Authorization: `token ${GH_TOKEN}`,
-              Accept: 'application/vnd.github+json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-          });
+          const res = await ghFetch(path, 'PUT', body);
 
           if (res.ok) {
             statusEl.textContent = '✓ Hochgeladen';
@@ -976,11 +968,8 @@
       grid.innerHTML = '<p style="color:rgba(245,240,234,0.3);font-size:0.85rem">Wird geladen...</p>';
 
       try {
-        const res = await fetch(GH_API, {
-          headers: { Authorization: `token ${GH_TOKEN}`, Accept: 'application/vnd.github+json' }
-        });
+        const res = await ghFetch(GH_PATH);
         const files = await res.json();
-
         const images = files.filter(f => /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name));
 
         if (!images.length) {
@@ -1008,17 +997,9 @@
       if (!confirm(`"${filename}" wirklich löschen?`)) return;
 
       try {
-        const res = await fetch(`${GH_API}/${filename}`, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `token ${GH_TOKEN}`,
-            Accept: 'application/vnd.github+json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: `Gallery: ${filename} gelöscht via Admin`,
-            sha: sha,
-          }),
+        const res = await ghFetch(`${GH_PATH}/${filename}`, 'DELETE', {
+          message: `Gallery: ${filename} gelöscht via Admin`,
+          sha: sha,
         });
 
         if (res.ok) {
