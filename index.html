@@ -722,8 +722,8 @@
     .blog-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 2px;
-      background: var(--earth);
+      gap: 1.5rem;
+      background: transparent;
     }
 
     .blog-card {
@@ -1337,8 +1337,9 @@
       <div class="blog-card blog-placeholder"></div>
       <div class="blog-card blog-placeholder"></div>
     </div>
-    <div id="blogMore" style="display:none;text-align:center;margin-top:2rem;">
-      <button class="gallery-load-more" onclick="showMoreBlog()">+ Mehr laden</button>
+    <div id="blogMore" style="display:none;text-align:center;margin-top:2rem;display:flex;gap:1rem;justify-content:center;">
+      <button class="gallery-load-more" id="blogMoreBtn" onclick="showMoreBlog()" style="display:none">+ Mehr laden</button>
+      <button class="gallery-load-more" id="blogLessBtn" onclick="showLessBlog()" style="display:none">− Weniger</button>
     </div>
   </section>
 
@@ -1377,14 +1378,37 @@
           return;
         }
 
-        showMoreBlog();
+        // Erste 4 direkt rendern
+        allBlogPosts.slice(0, BLOG_PAGE_SIZE).forEach(post => {
+          const slug = post._file.replace('.json', '');
+          const datum = post.datum ? new Date(post.datum).toLocaleDateString('de-DE', {day:'2-digit', month:'long', year:'numeric'}) : '';
+          const card = document.createElement('a');
+          card.href = `blogpost.html?post=${slug}`;
+          card.className = 'blog-card';
+          card.innerHTML = `
+            ${post.foto ? `<div class="blog-card-img-wrap"><div class="blog-card-img" style="background-image:url('${post.foto}')"></div></div>` : ''}
+            <div class="blog-card-body">
+              <p class="blog-meta">${datum}</p>
+              <h3>${post.titel || ''}</h3>
+              <p>${(post.text || '').substring(0, 120)}…</p>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        blogShown = Math.min(BLOG_PAGE_SIZE, allBlogPosts.length);
+        updateBlogButtons();
       } catch(e) {}
+    }
+
+    function updateBlogButtons() {
+      document.getElementById('blogMoreBtn').style.display = blogShown < allBlogPosts.length ? 'inline-block' : 'none';
+      document.getElementById('blogLessBtn').style.display = blogShown > BLOG_PAGE_SIZE ? 'inline-block' : 'none';
+      document.getElementById('blogMore').style.display = 'flex';
     }
 
     function showMoreBlog() {
       const grid = document.getElementById('blogGrid');
       const next = allBlogPosts.slice(blogShown, blogShown + BLOG_PAGE_SIZE);
-
       next.forEach(post => {
         const slug = post._file.replace('.json', '');
         const datum = post.datum ? new Date(post.datum).toLocaleDateString('de-DE', {day:'2-digit', month:'long', year:'numeric'}) : '';
@@ -1401,10 +1425,32 @@
         `;
         grid.appendChild(card);
       });
-
       blogShown += next.length;
-      const moreBtn = document.getElementById('blogMore');
-      moreBtn.style.display = blogShown < allBlogPosts.length ? 'block' : 'none';
+      updateBlogButtons();
+    }
+
+    function showLessBlog() {
+      blogShown = BLOG_PAGE_SIZE;
+      const grid = document.getElementById('blogGrid');
+      grid.innerHTML = '';
+      allBlogPosts.slice(0, BLOG_PAGE_SIZE).forEach(post => {
+        const slug = post._file.replace('.json', '');
+        const datum = post.datum ? new Date(post.datum).toLocaleDateString('de-DE', {day:'2-digit', month:'long', year:'numeric'}) : '';
+        const card = document.createElement('a');
+        card.href = `blogpost.html?post=${slug}`;
+        card.className = 'blog-card';
+        card.innerHTML = `
+          ${post.foto ? `<div class="blog-card-img-wrap"><div class="blog-card-img" style="background-image:url('${post.foto}')"></div></div>` : ''}
+          <div class="blog-card-body">
+            <p class="blog-meta">${datum}</p>
+            <h3>${post.titel || ''}</h3>
+            <p>${(post.text || '').substring(0, 120)}…</p>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      updateBlogButtons();
+      document.getElementById('blog').scrollIntoView({behavior:'smooth'});
     }
 
     loadBlog();

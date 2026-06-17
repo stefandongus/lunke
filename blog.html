@@ -31,7 +31,7 @@
     .page-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; display: block; }
     .page-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(2.5rem, 6vw, 4.5rem); text-transform: uppercase; line-height: 1; color: var(--white); }
 
-    .blog-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--earth); max-width: 1100px; margin: 0 auto; }
+    .blog-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; background: transparent; max-width: 1100px; margin: 0 auto; }
     .blog-card { background: var(--dirt); text-decoration: none; display: block; transition: background 0.2s; }
     .blog-card:hover { background: #3a2a16; }
     .blog-card-img-wrap { width: 100%; padding-top: 75%; position: relative; overflow: hidden; }
@@ -74,8 +74,9 @@
     <div class="blog-card blog-placeholder"></div>
   </div>
 
-  <div class="load-more-wrap" id="blogMore" style="display:none">
-    <button class="load-more-btn" onclick="showMoreBlog()">+ Mehr laden</button>
+  <div class="load-more-wrap" id="blogMore" style="display:none;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <button class="load-more-btn" id="blogMoreBtn" onclick="showMoreBlog()" style="display:none">+ Mehr laden</button>
+    <button class="load-more-btn" id="blogLessBtn" onclick="showLessBlog()" style="display:none">− Weniger</button>
   </div>
 
   <script>
@@ -96,30 +97,53 @@
         }));
         document.getElementById('blogGrid').innerHTML = '';
         shown = 0;
-        showMoreBlog();
+        if (!allPosts.length) {
+          document.getElementById('blogGrid').innerHTML = '<p style="color:rgba(245,240,234,0.4)">Noch keine Posts.</p>';
+          return;
+        }
+        allPosts.slice(0, PAGE_SIZE).forEach(p => document.getElementById('blogGrid').appendChild(renderCard(p)));
+        shown = Math.min(PAGE_SIZE, allPosts.length);
+        updateButtons();
       } catch(e) {}
+    }
+
+    function renderCard(post) {
+      const slug = post._file.replace('.json','');
+      const datum = post.datum ? new Date(post.datum).toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : '';
+      const card = document.createElement('a');
+      card.href = `blogpost.html?post=${slug}`;
+      card.className = 'blog-card';
+      card.innerHTML = `
+        ${post.foto ? `<div class="blog-card-img-wrap"><div class="blog-card-img" style="background-image:url('${post.foto}')"></div></div>` : ''}
+        <div class="blog-card-body">
+          <p class="blog-meta">${datum}</p>
+          <h3>${post.titel||''}</h3>
+          <p>${(post.text||'').substring(0,140)}…</p>
+        </div>`;
+      return card;
+    }
+
+    function updateButtons() {
+      document.getElementById('blogMoreBtn').style.display = shown < allPosts.length ? 'inline-block' : 'none';
+      document.getElementById('blogLessBtn').style.display = shown > PAGE_SIZE ? 'inline-block' : 'none';
+      document.getElementById('blogMore').style.display = 'flex';
     }
 
     function showMoreBlog() {
       const grid = document.getElementById('blogGrid');
-      const next = allPosts.slice(shown, shown + PAGE_SIZE);
-      next.forEach(post => {
-        const slug = post._file.replace('.json','');
-        const datum = post.datum ? new Date(post.datum).toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : '';
-        const card = document.createElement('a');
-        card.href = `blogpost.html?post=${slug}`;
-        card.className = 'blog-card';
-        card.innerHTML = `
-          ${post.foto ? `<div class="blog-card-img-wrap"><div class="blog-card-img" style="background-image:url('${post.foto}')"></div></div>` : ''}
-          <div class="blog-card-body">
-            <p class="blog-meta">${datum}</p>
-            <h3>${post.titel||''}</h3>
-            <p>${(post.text||'').substring(0,140)}…</p>
-          </div>`;
-        grid.appendChild(card);
-      });
-      shown += next.length;
-      document.getElementById('blogMore').style.display = shown < allPosts.length ? 'block' : 'none';
+      allPosts.slice(shown, shown + PAGE_SIZE).forEach(p => grid.appendChild(renderCard(p)));
+      shown += Math.min(PAGE_SIZE, allPosts.length - shown);
+      updateButtons();
+    }
+
+    function showLessBlog() {
+      const grid = document.getElementById('blogGrid');
+      grid.innerHTML = '';
+      shown = 0;
+      allPosts.slice(0, PAGE_SIZE).forEach(p => grid.appendChild(renderCard(p)));
+      shown = Math.min(PAGE_SIZE, allPosts.length);
+      updateButtons();
+      window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     loadBlog();
